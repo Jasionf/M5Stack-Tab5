@@ -1,0 +1,19 @@
+dependencies:
+  idf:
+    version: ">=5.4"
+  espressif/m5stack_tab5:
+    version: "^1.0.1"
+  # esp_wifi_remote provides WiFi + ESP-NOW support on ESP32-P4
+  # (the C6 coprocessor acts as the wireless co-processor)
+  # Pinned to 0.8.5 — matches M5Tab5-UserDemo which is confirmed working on Tab5 hardware
+  espressif/esp_wifi_remote:
+    version: "0.8.5"
+    rules:
+      - if: "target in [esp32p4]"
+  # NimBLE host for BLE (controller lives in ESP32-C6 coprocessor)
+  # Pinned to 1.4.0 — this version uses Slot 0 GPIO 8-13 for Tab5, newer versions use wrong pins (39-44)
+  espressif/esp_hosted:
+    version: "1.4.0"
+    rules:
+      - if: "target in [esp32p4]"
+description: BSP Display example — ESP-NOW + BLE scan demo

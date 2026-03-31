@@ -1,0 +1,99 @@
+# This file was generated using idf.py save-defconfig. It can be edited manually.
+# Espressif IoT Development Framework (ESP-IDF) Project Minimal Configuration
+#
+CONFIG_IDF_TARGET="esp32p4"
+CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y
+CONFIG_ESPTOOLPY_FLASHSIZE="16MB"
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions.csv"
+CONFIG_PARTITION_TABLE_FILENAME="partitions.csv"
+
+CONFIG_CODEC_I2C_BACKWARD_COMPATIBLE=n
+
+
+# SPIRAM for ESP32-P4
+CONFIG_SPIRAM=y
+CONFIG_SPIRAM_SPEED_200M=y
+CONFIG_IDF_EXPERIMENTAL_FEATURES=y
+
+
+
+## LVGL9 ##
+CONFIG_LV_CONF_SKIP=y
+
+# CLIB default
+CONFIG_LV_USE_CLIB_MALLOC=y
+CONFIG_LV_USE_CLIB_SPRINTF=y
+CONFIG_LV_USE_CLIB_STRING=y
+
+# Performance monitor
+CONFIG_LV_USE_OBSERVER=y
+CONFIG_LV_USE_SYSMON=y
+CONFIG_LV_USE_PERF_MONITOR=y
+CONFIG_LV_USE_GIF=y
+
+# ── Wireless / ESP-NOW ────────────────────────────────────────────
+# WiFi remote: the ESP32-C6 coprocessor handles the wireless stack
+# accessed from P4 via esp_wifi_remote (SPI/UART hosted transport).
+CONFIG_ESP_WIFI_REMOTE_ENABLED=y
+
+# ── ESP-Hosted SDIO config for M5Stack Tab5 ───────────────────────
+# Tab5 physically wires C6 SDIO to GPIO 8-13, RST to GPIO 15 (active low).
+# Reference: M5Tab5-UserDemo platforms/tab5/sdkconfig (esp_hosted 1.4.0)
+CONFIG_ESP_HOSTED_SDIO_HOST_INTERFACE=y
+CONFIG_ESP_HOSTED_SDIO_GPIO_RESET_SLAVE=15
+CONFIG_ESP_HOSTED_SDIO_RESET_ACTIVE_LOW=y
+# Slave target — MUST be esp32c6 (boolean selector + string, both required for v1.4.0)
+CONFIG_SLAVE_IDF_TARGET_ESP32C6=y
+CONFIG_ESP_HOSTED_IDF_SLAVE_TARGET="esp32c6"
+CONFIG_IDF_SLAVE_TARGET="esp32c6"
+# SDIO data pins (IOMUXed, Tab5 schematic)
+CONFIG_ESP_HOSTED_SDIO_PIN_CLK=12
+CONFIG_ESP_HOSTED_SDIO_PIN_CMD=13
+CONFIG_ESP_HOSTED_SDIO_PIN_D0=11
+CONFIG_ESP_HOSTED_SDIO_PRIV_PIN_D1_4BIT_BUS=10
+CONFIG_ESP_HOSTED_SDIO_PIN_D1=10
+CONFIG_ESP_HOSTED_SDIO_PIN_D2=9
+CONFIG_ESP_HOSTED_SDIO_PIN_D3=8
+
+# ESP-NOW
+CONFIG_ESP_WIFI_NAN_ENABLE=n
+
+# NVS (required by WiFi driver)
+CONFIG_NVS_ENCRYPTION=n
+
+# ── BLE (NimBLE host on P4, controller on C6 via esp_hosted VHCI) ─
+CONFIG_BT_ENABLED=y
+CONFIG_BT_NIMBLE_ENABLED=y
+CONFIG_BT_NIMBLE_ROLE_CENTRAL=y
+CONFIG_BT_NIMBLE_ROLE_PERIPHERAL=n
+CONFIG_BT_NIMBLE_ROLE_BROADCASTER=n
+CONFIG_BT_NIMBLE_ROLE_OBSERVER=y
+CONFIG_BT_NIMBLE_MAX_CONNECTIONS=1
+CONFIG_BT_NIMBLE_MEM_ALLOC_MODE_INTERNAL=y
+# MUST be disabled: NimBLE must NOT use UART transport — esp_hosted provides VHCI over SDIO
+CONFIG_BT_NIMBLE_TRANSPORT_UART=n
+# Enable esp_hosted NimBLE VHCI support (requires !BT_NIMBLE_TRANSPORT_UART + !BT_CONTROLLER_ENABLED)
+CONFIG_ESP_HOSTED_ENABLE_BT_NIMBLE=y
+CONFIG_ESP_HOSTED_NIMBLE_HCI_VHCI=y
+
+# ── NimBLE ACL / MSYS buffer pools ────────────────────────────────
+# Default ACL_FROM_LL_COUNT=10 is too small for HID notify bursts (key-down+key-up
+# pairs arrive back-to-back and exhaust the pool → "alloc_acl_from_ll failed").
+# Increase to 48 to absorb rapid keystroke notifications without dropping packets.
+CONFIG_BT_NIMBLE_TRANSPORT_ACL_FROM_LL_COUNT=48
+# MSYS1 buffers (small, ≤ 292 bytes) — used for HCI commands and small ACL payloads.
+CONFIG_BT_NIMBLE_MSYS_1_BLOCK_COUNT=48
+# MSYS2 buffers (large, ≤ 2408 bytes) — used for larger ACL payloads. 8 is enough for HID.
+CONFIG_BT_NIMBLE_MSYS_2_BLOCK_COUNT=8
+# NimBLE host task stack: GATT discovery + SMP pairing + HID notify handler require
+# significantly more than the default 4 KB.  6 KB is sufficient for all three.
+CONFIG_BT_NIMBLE_HOST_TASK_STACK_SIZE=6144
+
+# ── Additional NimBLE buffer configuration ────────────────────────
+# Increase ACL buffer count and size for better HID performance
+CONFIG_BT_NIMBLE_ACL_BUF_COUNT=48
+CONFIG_BT_NIMBLE_ACL_BUF_SIZE=255
+# Increase HCI event buffers
+CONFIG_BT_NIMBLE_HCI_EVT_HI_BUF_COUNT=48
+CONFIG_BT_NIMBLE_HCI_EVT_LO_BUF_COUNT=16

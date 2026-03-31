@@ -1,0 +1,8 @@
+Command: /Users/jason/.espressif/python_env/idf5.5_py3.10_env/bin/python /Users/jason/esp/v5.5.1/esp-idf/tools/idf_monitor.py -p /dev/cu.usbmodem1301 -b 115200 --toolchain-prefix riscv32-esp-elf- --target esp32p4 --revision 1 --decode-panic backtrace /Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build/TerminalDemo.elf /Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build/bootloader/bootloader.elf -m '/Users/jason/.espressif/python_env/idf5.5_py3.10_env/bin/python' '/Users/jason/esp/v5.5.1/esp-idf/tools/idf.py' '-p' '/dev/cu.usbmodem1301'
+[0;33m--- esp-idf-monitor 1.8.0 on /dev/cu.usbmodem1301 115200[0m
+[0;33m--- Quit: Ctrl+] | Menu: Ctrl+T | Help: Ctrl+T followed by Ctrl+H[0m
+[0;33m--- Connection to /dev/cu.usbmodem1301 failed. Available ports:
+--- /dev/cu.debug-console
+--- /dev/cu.usbmodem1201
+--- /dev/cu.usbmodem1301[0m
+[0m

@@ -1,0 +1,88 @@
+Command: ninja flash
+[1/5] cd /Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build/esp-idf/esptool_py && /Users/jason/.espressif/python_env/idf5.5_py3.10_env/bin/python /Users/jason/esp/v5.5.1/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build/partition_table/partition-table.bin /Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build/TerminalDemo.bin
+TerminalDemo.bin binary size 0x186830 bytes. Smallest app partition is 0xf00000 bytes. 0xd797d0 bytes (90%) free.
+[2/5] Performing build step for 'bootloader'
+[1/1] cd /Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build/bootloader/esp-idf/esptool_py && /Users/jason/.espressif/python_env/idf5.5_py3.10_env/bin/python /Users/jason/esp/v5.5.1/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x2000 /Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build/bootloader/bootloader.bin
+Bootloader binary size 0x5810 bytes. 0x7f0 bytes (8%) free.
+[3/5] No install step for 'bootloader'
+[4/5] Completed 'bootloader'
+[4/5] cd /Users/jason/esp/v5.5.1/esp-idf/components/esptool_py && /Users/jason/.espressif/tools/cmake/3.30.2/CMake.app/Contents/bin/cmake -D IDF_PATH=/Users/jason/esp/v5.5.1/esp-idf -D "SERIAL_TOOL=/Users/jason/.espressif/python_env/idf5.5_py3.10_env/bin/python;;/Users/jason/esp/v5.5.1/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32p4" -D "SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args" -D WORKING_DIRECTORY=/Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build -P /Users/jason/esp/v5.5.1/esp-idf/components/esptool_py/run_serial_tool.cmake
+esptool.py --chip esp32p4 -p /dev/cu.usbmodem1301 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 16MB 0x2000 bootloader/bootloader.bin 0x10000 TerminalDemo.bin 0x8000 partition_table/partition-table.bin
+esptool.py v4.10.0
+Serial port /dev/cu.usbmodem1301
+Connecting...
+Chip is ESP32-P4 (revision v1.0)
+Features: High-Performance MCU
+Crystal is 40MHz
+USB mode: USB-Serial/JTAG
+MAC: 30:ed:a0:e2:99:cd
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00002000 to 0x00007fff...
+Flash will be erased from 0x00010000 to 0x00196fff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+SHA digest in image updated
+Compressed 22544 bytes to 13859...
+Writing at 0x00002000... (100 %)
+Wrote 22544 bytes (13859 compressed) at 0x00002000 in 0.2 seconds (effective 892.5 kbit/s)...
+Hash of data verified.
+Compressed 1599536 bytes to 749083...
+Writing at 0x00010000... (2 %)
+Writing at 0x0001d8fb... (4 %)
+Writing at 0x0002ac9f... (6 %)
+Writing at 0x00037e4d... (8 %)
+Writing at 0x00041964... (10 %)
+Writing at 0x00069a76... (13 %)
+Writing at 0x0007507c... (15 %)
+Writing at 0x0007c6ec... (17 %)
+Writing at 0x0008412c... (19 %)
+Writing at 0x0008c4a4... (21 %)
+Writing at 0x00095030... (23 %)
+Writing at 0x0009b80b... (26 %)
+Writing at 0x000a2bd0... (28 %)
+Writing at 0x000a9e53... (30 %)
+Writing at 0x000b250c... (32 %)
+Writing at 0x000bada1... (34 %)
+Writing at 0x000c31a0... (36 %)
+Writing at 0x000ca515... (39 %)
+Writing at 0x000d126f... (41 %)
+Writing at 0x000d7412... (43 %)
+Writing at 0x000dd9d9... (45 %)
+Writing at 0x000e51de... (47 %)
+Writing at 0x000eaf6d... (50 %)
+Writing at 0x000f121e... (52 %)
+Writing at 0x000f7195... (54 %)
+Writing at 0x000fd367... (56 %)
+Writing at 0x00103a7b... (58 %)
+Writing at 0x0010e7d8... (60 %)
+Writing at 0x00115cfb... (63 %)
+Writing at 0x0011e1e6... (65 %)
+Writing at 0x00125044... (67 %)
+Writing at 0x0012c20c... (69 %)
+Writing at 0x001337e7... (71 %)
+Writing at 0x0013aaae... (73 %)
+Writing at 0x0014203b... (76 %)
+Writing at 0x00148f46... (78 %)
+Writing at 0x0014fad6... (80 %)
+Writing at 0x001566eb... (82 %)
+Writing at 0x0015dab0... (84 %)
+Writing at 0x00164c8c... (86 %)
+Writing at 0x0016afec... (89 %)
+Writing at 0x00171157... (91 %)
+Writing at 0x0017956f... (93 %)
+Writing at 0x0018113e... (95 %)
+Writing at 0x001884fc... (97 %)
+Writing at 0x0018f7cb... (100 %)
+Wrote 1599536 bytes (749083 compressed) at 0x00010000 in 6.3 seconds (effective 2036.8 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 105...
+Writing at 0x00008000... (100 %)
+Wrote 3072 bytes (105 compressed) at 0x00008000 in 0.0 seconds (effective 829.1 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...

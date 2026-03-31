@@ -1,0 +1,8 @@
+Command: ninja all
+[1/4] cd /Users/jason/Documents/Demo_Tab5andcardKB2/GameDemo/build/esp-idf/esptool_py && /Users/jason/.espressif/python_env/idf5.5_py3.10_env/bin/python /Users/jason/esp/v5.5.1/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /Users/jason/Documents/Demo_Tab5andcardKB2/GameDemo/build/partition_table/partition-table.bin /Users/jason/Documents/Demo_Tab5andcardKB2/GameDemo/build/GameDemo.bin
+GameDemo.bin binary size 0x1068f0 bytes. Smallest app partition is 0xf00000 bytes. 0xdf9710 bytes (93%) free.
+[2/4] Performing build step for 'bootloader'
+[1/1] cd /Users/jason/Documents/Demo_Tab5andcardKB2/GameDemo/build/bootloader/esp-idf/esptool_py && /Users/jason/.espressif/python_env/idf5.5_py3.10_env/bin/python /Users/jason/esp/v5.5.1/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x2000 /Users/jason/Documents/Demo_Tab5andcardKB2/GameDemo/build/bootloader/bootloader.bin
+Bootloader binary size 0x5810 bytes. 0x7f0 bytes (8%) free.
+[3/4] No install step for 'bootloader'
+[4/4] Completed 'bootloader'

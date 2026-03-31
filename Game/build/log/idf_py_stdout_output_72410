@@ -1,0 +1,77 @@
+Command: ninja flash
+[1/5] cd /Users/jason/Documents/Demo_Tab5andcardKB2/GameDemo/build/esp-idf/esptool_py && /Users/jason/.espressif/python_env/idf5.5_py3.10_env/bin/python /Users/jason/esp/v5.5.1/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 partition --type app /Users/jason/Documents/Demo_Tab5andcardKB2/GameDemo/build/partition_table/partition-table.bin /Users/jason/Documents/Demo_Tab5andcardKB2/GameDemo/build/GameDemo.bin
+GameDemo.bin binary size 0x10fa60 bytes. Smallest app partition is 0xf00000 bytes. 0xdf05a0 bytes (93%) free.
+[2/5] Performing build step for 'bootloader'
+[1/1] cd /Users/jason/Documents/Demo_Tab5andcardKB2/GameDemo/build/bootloader/esp-idf/esptool_py && /Users/jason/.espressif/python_env/idf5.5_py3.10_env/bin/python /Users/jason/esp/v5.5.1/esp-idf/components/partition_table/check_sizes.py --offset 0x8000 bootloader 0x2000 /Users/jason/Documents/Demo_Tab5andcardKB2/GameDemo/build/bootloader/bootloader.bin
+Bootloader binary size 0x5810 bytes. 0x7f0 bytes (8%) free.
+[3/5] No install step for 'bootloader'
+[4/5] Completed 'bootloader'
+[4/5] cd /Users/jason/esp/v5.5.1/esp-idf/components/esptool_py && /Users/jason/.espressif/tools/cmake/3.30.2/CMake.app/Contents/bin/cmake -D IDF_PATH=/Users/jason/esp/v5.5.1/esp-idf -D "SERIAL_TOOL=/Users/jason/.espressif/python_env/idf5.5_py3.10_env/bin/python;;/Users/jason/esp/v5.5.1/esp-idf/components/esptool_py/esptool/esptool.py;--chip;esp32p4" -D "SERIAL_TOOL_ARGS=--before=default_reset;--after=hard_reset;write_flash;@flash_args" -D WORKING_DIRECTORY=/Users/jason/Documents/Demo_Tab5andcardKB2/GameDemo/build -P /Users/jason/esp/v5.5.1/esp-idf/components/esptool_py/run_serial_tool.cmake
+esptool.py --chip esp32p4 -p /dev/cu.usbmodem101 -b 460800 --before=default_reset --after=hard_reset write_flash --flash_mode dio --flash_freq 80m --flash_size 16MB 0x2000 bootloader/bootloader.bin 0x10000 GameDemo.bin 0x8000 partition_table/partition-table.bin
+esptool.py v4.10.0
+Serial port /dev/cu.usbmodem101
+Connecting...
+Chip is ESP32-P4 (revision v1.0)
+Features: High-Performance MCU
+Crystal is 40MHz
+USB mode: USB-Serial/JTAG
+MAC: 30:ed:a0:e2:99:cd
+Uploading stub...
+Running stub...
+Stub running...
+Changing baud rate to 460800
+Changed.
+Configuring flash size...
+Flash will be erased from 0x00002000 to 0x00007fff...
+Flash will be erased from 0x00010000 to 0x0011ffff...
+Flash will be erased from 0x00008000 to 0x00008fff...
+SHA digest in image updated
+Compressed 22544 bytes to 13860...
+Writing at 0x00002000... (100 %)
+Wrote 22544 bytes (13860 compressed) at 0x00002000 in 0.2 seconds (effective 838.8 kbit/s)...
+Hash of data verified.
+Compressed 1112672 bytes to 560108...
+Writing at 0x00010000... (2 %)
+Writing at 0x0001c652... (5 %)
+Writing at 0x000283e2... (8 %)
+Writing at 0x00030040... (11 %)
+Writing at 0x00038db8... (14 %)
+Writing at 0x00048466... (17 %)
+Writing at 0x00055a46... (20 %)
+Writing at 0x0005c6a6... (22 %)
+Writing at 0x000634d6... (25 %)
+Writing at 0x0006ab9f... (28 %)
+Writing at 0x0007265a... (31 %)
+Writing at 0x00079e9e... (34 %)
+Writing at 0x00080fea... (37 %)
+Writing at 0x00087e56... (40 %)
+Writing at 0x0008ef46... (42 %)
+Writing at 0x00095787... (45 %)
+Writing at 0x0009b9ee... (48 %)
+Writing at 0x000a21ea... (51 %)
+Writing at 0x000a931b... (54 %)
+Writing at 0x000af231... (57 %)
+Writing at 0x000b5262... (60 %)
+Writing at 0x000bb17a... (62 %)
+Writing at 0x000c1883... (65 %)
+Writing at 0x000cb738... (68 %)
+Writing at 0x000d3e0f... (71 %)
+Writing at 0x000dbae0... (74 %)
+Writing at 0x000e3691... (77 %)
+Writing at 0x000ea37a... (80 %)
+Writing at 0x000f114f... (82 %)
+Writing at 0x000f773e... (85 %)
+Writing at 0x000ff9fa... (88 %)
+Writing at 0x00106d64... (91 %)
+Writing at 0x0010e250... (94 %)
+Writing at 0x001154be... (97 %)
+Writing at 0x0011db1c... (100 %)
+Wrote 1112672 bytes (560108 compressed) at 0x00010000 in 4.4 seconds (effective 2029.9 kbit/s)...
+Hash of data verified.
+Compressed 3072 bytes to 105...
+Writing at 0x00008000... (100 %)
+Wrote 3072 bytes (105 compressed) at 0x00008000 in 0.0 seconds (effective 534.4 kbit/s)...
+Hash of data verified.
+
+Leaving...
+Hard resetting via RTS pin...

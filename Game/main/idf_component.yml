@@ -1,0 +1,6 @@
+dependencies:
+  idf:
+    version: ">=5.4"
+  espressif/m5stack_tab5:
+    version: "^1.0.1"
+description: GameDemo - M5Stack Tab5 Game Application

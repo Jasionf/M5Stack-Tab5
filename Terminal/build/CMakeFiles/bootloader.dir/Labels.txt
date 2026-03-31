@@ -1,0 +1,13 @@
+# Target labels
+ bootloader
+# Source files and their labels
+/Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build/CMakeFiles/bootloader
+/Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build/CMakeFiles/bootloader.rule
+/Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build/CMakeFiles/bootloader-complete.rule
+/Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build/bootloader-prefix/src/bootloader-stamp/bootloader-build.rule
+/Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build/bootloader-prefix/src/bootloader-stamp/bootloader-configure.rule
+/Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build/bootloader-prefix/src/bootloader-stamp/bootloader-download.rule
+/Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build/bootloader-prefix/src/bootloader-stamp/bootloader-install.rule
+/Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build/bootloader-prefix/src/bootloader-stamp/bootloader-mkdir.rule
+/Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build/bootloader-prefix/src/bootloader-stamp/bootloader-patch.rule
+/Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build/bootloader-prefix/src/bootloader-stamp/bootloader-update.rule

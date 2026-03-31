@@ -1,0 +1,793 @@
+/*
+ * SPDX-FileCopyrightText: 2021-2025 Espressif Systems (Shanghai) CO LTD
+ *
+ * SPDX-License-Identifier: CC0-1.0
+ */
+
+#include "lvgl.h"
+#include <stdbool.h>
+#include <stdio.h>
+
+/* GIF */
+extern const lv_image_dsc_t choose_gif_dsc;
+
+/* Icons */
+LV_IMG_DECLARE(logo_espnow)
+LV_IMG_DECLARE(bluetooth_logo)
+LV_IMG_DECLARE(arrow_orange)
+LV_IMG_DECLARE(arrow_blue)
+LV_IMG_DECLARE(finder)
+LV_IMG_DECLARE(node)
+
+/* Fonts */
+LV_FONT_DECLARE(lv_font_inter_bold_48)
+LV_FONT_DECLARE(lv_font_inter_light_14)
+LV_FONT_DECLARE(lv_font_inter_bold_32)
+LV_FONT_DECLARE(lv_font_inter_regular_16)
+LV_FONT_DECLARE(lv_font_inter_bold_13)
+LV_FONT_DECLARE(lv_font_inter_regular_14)
+LV_FONT_DECLARE(lv_font_inter_bold_14)
+LV_FONT_DECLARE(lv_font_inter_bold_10)
+LV_FONT_DECLARE(lv_font_inter_bold_24)
+LV_FONT_DECLARE(lv_font_inter_regular_12)
+LV_FONT_DECLARE(lv_font_inter_medium_10)
+LV_FONT_DECLARE(lv_font_inter_regular_24)
+LV_FONT_DECLARE(lv_font_inter_regular_20)
+LV_FONT_DECLARE(lv_font_inter_regular_32)
+
+/* ── Color palette ─────────────────────────────────────────── */
+#define C_ORANGE        lv_color_hex(0xFFB786)
+#define C_WHITE         lv_color_hex(0xE5E2E1)
+#define C_GRAY          lv_color_hex(0x9B877B)
+#define C_CARD_BG       lv_color_hex(0x1C1B1B)
+#define C_ICON_ESPNOW   lv_color_hex(0x332B26)
+#define C_ICON_BT       lv_color_hex(0x1F2732)
+#define C_BLUE          lv_color_hex(0x3D90FF)
+#define C_BLACK         lv_color_hex(0x000000)
+#define C_PURE_WHITE    lv_color_hex(0xFFFFFF)
+#define C_PROGRESS_BG   lv_color_hex(0xD9D9D9)
+#define C_NODE_BG       lv_color_hex(0x2A2A2A)
+#define C_WARM          lv_color_hex(0xDEC1AF)
+#define C_BADGE_BT_BG   lv_color_hex(0x3D90FF)
+#define C_DARK_ORANGE   lv_color_hex(0x572800)
+#define C_DEEP_ORANGE   lv_color_hex(0xF57C00)
+#define C_CONNECTED     lv_color_hex(0x2E7D32)
+
+/* ── Node data (used by both forward decl and make_node_item) ── */
+typedef struct {
+    const char *name;
+    const char *type_tag;
+    bool        is_bt;
+    const char *signal;
+    const char *latency;
+} node_info_t;
+
+static const node_info_t g_nodes[] = {
+    { "CARDKB-BT-7A2F",  "BT HID",  true,  "-58 dBm", "8 ms"  },
+    { "TAB5-NODE-8B1E",  "ESP-NOW", false, "-71 dBm", "14 ms" },
+    { "CARDKB-BT-3C9D",  "BT HID",  true,  "-65 dBm", "11 ms" },
+    { "CARDKB-BT-1F8A",  "BT HID",  true,  "-72 dBm", "16 ms" },
+};
+#define N_NODES  4
+
+/* ── Layout constants (landscape 1280×720) ──────────────────── */
+#define SCREEN_W        1280
+#define SCREEN_H        720
+#define CARD_W          500
+#define CARD_H          325
+#define CARD_RADIUS     24
+#define CARD_PAD_H      28
+#define CARD_PAD_V      28
+#define CARD_GAP        56
+#define CARD_MARGIN     ((SCREEN_W - CARD_W * 2 - CARD_GAP) / 2)  /* = 112 */
+#define CARD_Y          295
+#define ICON_BG_SIZE    64
+#define ICON_BG_RADIUS  16
+#define CARD_LIFT_PX    24   /* how many px the selected card rises */
+#define CARD_ANIM_MS    280  /* card lift/lower animation duration */
+/* Page 2 content area */
+#define P2_GLOW_X       93
+#define P2_GLOW_Y       43
+#define P2_GLOW_SIZE    69
+#define P2_SCAN_X       185
+#define P2_SCAN_Y       59
+#define P2_PROG_X       185
+#define P2_PROG_Y       99
+#define P2_PROG_W       540
+#define P2_PROG_CHUNK_W 98
+#define P2_HEAD_X       105
+#define P2_HEAD_Y       170
+#define P2_PANEL_X      93
+#define P2_PANEL_Y      218
+#define P2_NODE_W       1070
+
+/* ── State ───────────────────────────────────────────────────── */
+static int      g_selected   = -1;   /* 0 = ESP-NOW, 1 = BT */
+static lv_obj_t *g_cards[2]  = {NULL, NULL};
+
+/* Page-2 overlay handles (used by connect callback) */
+static lv_obj_t *g_p2_overlay   = NULL;
+static lv_obj_t *g_p2_spinner   = NULL;
+static lv_obj_t *g_p2_result    = NULL;
+static lv_obj_t *g_connect_btn  = NULL;
+
+/* ── Forward decl ─────────────────────────────────────────────── */
+static void build_page2(bool is_bt);
+static void make_node_item(lv_obj_t *parent, const node_info_t *n, lv_color_t accent, bool page_is_bt, lv_obj_t *scr2);
+static void connect_click_cb(lv_event_t *e);
+static void overlay_delete_anim_done(lv_anim_t *a);
+
+/* ── Helpers ──────────────────────────────────────────────────── */
+static void card_y_anim_cb(void *obj, int32_t y)
+{
+    lv_obj_set_y((lv_obj_t *)obj, y);
+}
+
+static void card_set_lifted(int idx, bool lifted)
+{
+    lv_obj_t *card = g_cards[idx];
+    bool is_bt = (idx == 1);
+    lv_color_t glow = is_bt ? C_BLUE : C_ORANGE;
+
+    /* Smooth Y animation (ease-out, no layout change → small dirty rect) */
+    int32_t from_y = lv_obj_get_y(card);
+    int32_t to_y   = lifted ? CARD_Y - CARD_LIFT_PX : CARD_Y;
+    if (from_y != to_y) {
+        lv_anim_t a;
+        lv_anim_init(&a);
+        lv_anim_set_exec_cb(&a, card_y_anim_cb);
+        lv_anim_set_var(&a, card);
+        lv_anim_set_values(&a, from_y, to_y);
+        lv_anim_set_duration(&a, CARD_ANIM_MS);
+        lv_anim_set_path_cb(&a, lv_anim_path_ease_out);
+        lv_anim_start(&a);
+    }
+
+    /* Glow effect via border only — shadow disabled (causes full repaint / tearing).
+     * A 2px colored border redraws only the card boundary, not surrounding pixels. */
+    if (lifted) {
+        lv_obj_set_style_border_color(card, glow, 0);
+        lv_obj_set_style_border_width(card, 2, 0);
+        lv_obj_set_style_border_opa(card, LV_OPA_70, 0);
+        /* No shadow — it forces the renderer to dirty a rectangle larger than the widget */
+        lv_obj_set_style_shadow_width(card, 0, 0);
+        lv_obj_set_style_shadow_opa(card, LV_OPA_TRANSP, 0);
+    } else {
+        lv_obj_set_style_border_width(card, 0, 0);
+        lv_obj_set_style_shadow_width(card, 0, 0);
+        lv_obj_set_style_shadow_opa(card, LV_OPA_TRANSP, 0);
+    }
+}
+
+static void card_click_cb(lv_event_t *e)
+{
+    lv_obj_t *card = (lv_obj_t *)lv_event_get_user_data(e);
+    int idx = -1;
+    if (card == g_cards[0]) idx = 0;
+    else if (card == g_cards[1]) idx = 1;
+    if (idx < 0) return;
+
+    if (g_selected == idx) {
+        /* Second click → go to page 2 */
+        build_page2(idx == 1);
+    } else {
+        /* Deselect previous card */
+        if (g_selected >= 0) {
+            card_set_lifted(g_selected, false);
+        }
+        /* Lift this card */
+        g_selected = idx;
+        card_set_lifted(idx, true);
+    }
+}
+
+/* ── Build card ────────────────────────────────────────────────── */
+static void make_card(lv_obj_t *parent, bool is_bt, int32_t x)
+{
+    const lv_color_t  btn_color   = is_bt ? C_BLUE     : C_ORANGE;
+    const lv_color_t  icon_bg_col = is_bt ? C_ICON_BT  : C_ICON_ESPNOW;
+    const void       *icon_src    = is_bt ? (const void *)&bluetooth_logo : (const void *)&logo_espnow;
+    const void       *arrow_src   = is_bt ? (const void *)&arrow_blue     : (const void *)&arrow_orange;
+    int               card_idx    = is_bt ? 1 : 0;
+
+    /* Card container */
+    lv_obj_t *card = lv_obj_create(parent);
+    g_cards[card_idx] = card;
+    lv_obj_set_size(card, CARD_W, CARD_H);
+    lv_obj_set_pos(card, x, CARD_Y);
+    lv_obj_clear_flag(card, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_scrollbar_mode(card, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_set_style_bg_color(card, C_CARD_BG, 0);
+    lv_obj_set_style_bg_opa(card, LV_OPA_COVER, 0);
+    lv_obj_set_style_radius(card, CARD_RADIUS, 0);
+    lv_obj_set_style_border_width(card, 0, 0);
+    lv_obj_set_style_pad_hor(card, CARD_PAD_H, 0);
+    lv_obj_set_style_pad_top(card, CARD_PAD_V, 0);
+    lv_obj_set_style_pad_bottom(card, CARD_PAD_V, 0);
+    /* Make all child events bubble up so clicking any child hits the card cb */
+    lv_obj_add_flag(card, LV_OBJ_FLAG_EVENT_BUBBLE);
+    lv_obj_add_event_cb(card, card_click_cb, LV_EVENT_CLICKED, (void *)card);
+
+    /* Icon background */
+    lv_obj_t *icon_bg = lv_obj_create(card);
+    lv_obj_set_size(icon_bg, ICON_BG_SIZE, ICON_BG_SIZE);
+    lv_obj_set_style_radius(icon_bg, ICON_BG_RADIUS, 0);
+    lv_obj_set_style_bg_color(icon_bg, icon_bg_col, 0);
+    lv_obj_set_style_bg_opa(icon_bg, LV_OPA_COVER, 0);
+    lv_obj_set_style_border_width(icon_bg, 0, 0);
+    lv_obj_set_style_pad_all(icon_bg, 0, 0);
+    lv_obj_clear_flag(icon_bg, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_flag(icon_bg, LV_OBJ_FLAG_EVENT_BUBBLE);
+    lv_obj_align(icon_bg, LV_ALIGN_TOP_MID, 0, 0);
+
+    lv_obj_t *icon = lv_img_create(icon_bg);
+    lv_img_set_src(icon, icon_src);
+    /* Additive blend: black pixels become transparent on any dark background */
+    lv_obj_set_style_blend_mode(icon, LV_BLEND_MODE_ADDITIVE, 0);
+    lv_obj_add_flag(icon, LV_OBJ_FLAG_EVENT_BUBBLE);
+    lv_obj_center(icon);
+
+    /* Card title */
+    lv_obj_t *title = lv_label_create(card);
+    lv_label_set_text(title, is_bt ? "BLUETOOTH HID" : "ESP-NOW");
+    lv_obj_set_style_text_color(title, C_PURE_WHITE, 0);
+    lv_obj_set_style_text_font(title, &lv_font_inter_bold_32, 0);
+    lv_obj_add_flag(title, LV_OBJ_FLAG_EVENT_BUBBLE);
+    lv_obj_align(title, LV_ALIGN_TOP_MID, 0, ICON_BG_SIZE + 16);
+
+    /* Description */
+    lv_obj_t *desc = lv_label_create(card);
+    lv_label_set_text(desc, is_bt
+        ? "Standard peripheral interface for\nseamless integration with\nworkstation environments."
+        : "High-speed, low-latency peer-to-peer\nconnection for industrial\nhardware nodes.");
+    lv_obj_set_style_text_color(desc, C_GRAY, 0);
+    lv_obj_set_style_text_font(desc, &lv_font_inter_regular_16, 0);
+    lv_obj_set_style_text_line_space(desc, 5, 0);
+    lv_obj_set_style_text_align(desc, LV_TEXT_ALIGN_CENTER, 0);
+    lv_obj_set_width(desc, CARD_W - CARD_PAD_H * 2);
+    lv_label_set_long_mode(desc, LV_LABEL_LONG_WRAP);
+    lv_obj_add_flag(desc, LV_OBJ_FLAG_EVENT_BUBBLE);
+    lv_obj_align(desc, LV_ALIGN_TOP_MID, 0, ICON_BG_SIZE + 16 + 44);
+
+    /* Button */
+    lv_obj_t *btn = lv_obj_create(card);
+    lv_obj_set_size(btn, LV_SIZE_CONTENT, 40);
+    lv_obj_set_style_radius(btn, 20, 0);
+    lv_obj_set_style_bg_opa(btn, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_border_color(btn, btn_color, 0);
+    lv_obj_set_style_border_width(btn, 1, 0);
+    lv_obj_set_style_pad_hor(btn, 18, 0);
+    lv_obj_set_style_pad_ver(btn, 0, 0);
+    lv_obj_clear_flag(btn, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_add_flag(btn, LV_OBJ_FLAG_EVENT_BUBBLE);
+    lv_obj_set_layout(btn, LV_LAYOUT_FLEX);
+    lv_obj_set_flex_flow(btn, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(btn, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_set_style_pad_column(btn, 6, 0);
+    lv_obj_align(btn, LV_ALIGN_BOTTOM_MID, 0, 0);
+
+    lv_obj_t *btn_lbl = lv_label_create(btn);
+    lv_label_set_text(btn_lbl, is_bt ? "SCAN DEVICES" : "SCAN DEVICE");
+    lv_obj_set_style_text_color(btn_lbl, btn_color, 0);
+    lv_obj_set_style_text_font(btn_lbl, &lv_font_inter_bold_13, 0);
+    lv_obj_add_flag(btn_lbl, LV_OBJ_FLAG_EVENT_BUBBLE);
+
+    lv_obj_t *btn_arr = lv_img_create(btn);
+    lv_img_set_src(btn_arr, arrow_src);
+    lv_img_set_zoom(btn_arr, 512);
+    lv_obj_add_flag(btn_arr, LV_OBJ_FLAG_EVENT_BUBBLE);
+}
+
+/* ── Page 2: Device scan + list ─────────────────────────────── */
+
+/* Build one node row card inside the list */
+static void make_node_item(lv_obj_t *parent, const node_info_t *n, lv_color_t accent, bool page_is_bt, lv_obj_t *scr2)
+{
+    /* Row card: full width of panel, 102px tall (CSS) */
+    lv_obj_t *row = lv_obj_create(parent);
+    lv_obj_set_size(row, P2_NODE_W, 102);
+    lv_obj_set_style_bg_color(row, C_CARD_BG, 0);
+    lv_obj_set_style_bg_opa(row, LV_OPA_COVER, 0);
+    lv_obj_set_style_radius(row, 12, 0);
+    lv_obj_set_style_border_width(row, 0, 0);
+    lv_obj_set_style_pad_hor(row, 0, 0);
+    lv_obj_set_style_pad_ver(row, 0, 0);
+    lv_obj_clear_flag(row, LV_OBJ_FLAG_SCROLLABLE);
+
+    /* Left: icon bg (40×40) + text column, arranged in a flex row */
+    lv_obj_t *left = lv_obj_create(row);
+    lv_obj_remove_style_all(left);
+    lv_obj_set_size(left, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+    lv_obj_set_layout(left, LV_LAYOUT_FLEX);
+    lv_obj_set_flex_flow(left, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(left, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_set_style_pad_column(left, 23, 0);
+    lv_obj_align(left, LV_ALIGN_LEFT_MID, 27, 0);
+
+    /* Icon bg — CSS: 66×66, #2A2A2A, border-radius 8 */
+    lv_obj_t *icn_bg = lv_obj_create(left);
+    lv_obj_set_size(icn_bg, 66, 66);
+    lv_obj_set_style_bg_color(icn_bg, C_NODE_BG, 0);
+    lv_obj_set_style_bg_opa(icn_bg, LV_OPA_COVER, 0);
+    lv_obj_set_style_radius(icn_bg, 8, 0);
+    lv_obj_set_style_border_width(icn_bg, 0, 0);
+    lv_obj_set_style_pad_all(icn_bg, 0, 0);
+    lv_obj_clear_flag(icn_bg, LV_OBJ_FLAG_SCROLLABLE);
+
+    /* node.c icon (67×67 RGB565), zoom=244 → ~64px, additive blend removes black bg */
+    lv_obj_t *node_img = lv_img_create(icn_bg);
+    lv_img_set_src(node_img, &node);
+    lv_img_set_zoom(node_img, 244);
+    lv_obj_set_style_blend_mode(node_img, LV_BLEND_MODE_ADDITIVE, 0);
+    lv_obj_center(node_img);
+
+    /* Text column: name+badge on top row, signal+latency on bottom */
+    lv_obj_t *txt_col = lv_obj_create(left);
+    lv_obj_remove_style_all(txt_col);
+    lv_obj_set_size(txt_col, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+    lv_obj_set_layout(txt_col, LV_LAYOUT_FLEX);
+    lv_obj_set_flex_flow(txt_col, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_flex_align(txt_col, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
+    lv_obj_set_style_pad_gap(txt_col, 3, 0);
+
+    /* Name + type badge row */
+    lv_obj_t *name_row = lv_obj_create(txt_col);
+    lv_obj_remove_style_all(name_row);
+    lv_obj_set_size(name_row, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+    lv_obj_set_layout(name_row, LV_LAYOUT_FLEX);
+    lv_obj_set_flex_flow(name_row, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(name_row, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_set_style_pad_column(name_row, 8, 0);
+
+    lv_obj_t *lbl_name = lv_label_create(name_row);
+    lv_label_set_text(lbl_name, n->name);
+    lv_obj_set_style_text_color(lbl_name, C_WHITE, 0);
+    lv_obj_set_style_text_font(lbl_name, &lv_font_inter_bold_24, 0);
+
+    /* Type badge */
+    lv_obj_t *badge = lv_obj_create(name_row);
+    lv_obj_set_size(badge, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+    lv_obj_set_style_radius(badge, 4, 0);
+    lv_obj_set_style_border_width(badge, 0, 0);
+    lv_obj_set_style_pad_hor(badge, 8, 0);
+    lv_obj_set_style_pad_ver(badge, 2, 0);
+    lv_obj_clear_flag(badge, LV_OBJ_FLAG_SCROLLABLE);
+    /* BT badge: blue tint bg; ESP-NOW badge: warm tint bg */
+    if (n->is_bt) {
+        lv_obj_set_style_bg_color(badge, C_BADGE_BT_BG, 0);
+        lv_obj_set_style_bg_opa(badge, 26, 0); /* ~10% opacity */
+    } else {
+        lv_obj_set_style_bg_color(badge, C_WARM, 0);
+        lv_obj_set_style_bg_opa(badge, 51, 0); /* ~20% opacity */
+    }
+    lv_obj_t *lbl_tag = lv_label_create(badge);
+    lv_label_set_text(lbl_tag, n->type_tag);
+    lv_obj_set_style_text_color(lbl_tag, n->is_bt ? C_BLUE : C_WARM, 0);
+    lv_obj_set_style_text_font(lbl_tag, &lv_font_inter_bold_10, 0);
+
+    /* Metrics row: signal + latency */
+    lv_obj_t *meta_row = lv_obj_create(txt_col);
+    lv_obj_remove_style_all(meta_row);
+    lv_obj_set_size(meta_row, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+    lv_obj_set_layout(meta_row, LV_LAYOUT_FLEX);
+    lv_obj_set_flex_flow(meta_row, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(meta_row, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_set_style_pad_column(meta_row, 12, 0);
+
+    /* Signal */
+    lv_obj_t *lbl_sig = lv_label_create(meta_row);
+    lv_label_set_text(lbl_sig, n->signal);
+    lv_obj_set_style_text_color(lbl_sig, C_WARM, 0);
+    lv_obj_set_style_text_font(lbl_sig, &lv_font_inter_regular_14, 0);
+
+    /* Latency */
+    lv_obj_t *lbl_lat = lv_label_create(meta_row);
+    lv_label_set_text(lbl_lat, n->latency);
+    lv_obj_set_style_text_color(lbl_lat, C_WARM, 0);
+    lv_obj_set_style_text_font(lbl_lat, &lv_font_inter_regular_14, 0);
+
+    /* Right: CONNECT button — CSS: 108×51, border-radius 8, padding 8px 16px */
+    lv_obj_t *btn = lv_obj_create(row);
+    lv_obj_set_size(btn, 108, 51);
+    lv_obj_set_style_bg_color(btn, accent, 0);
+    lv_obj_set_style_bg_opa(btn, LV_OPA_COVER, 0);
+    lv_obj_set_style_radius(btn, 8, 0);
+    lv_obj_set_style_border_width(btn, 0, 0);
+    lv_obj_set_style_pad_hor(btn, 16, 0);
+    lv_obj_set_style_pad_ver(btn, 8, 0);
+    lv_obj_clear_flag(btn, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_align(btn, LV_ALIGN_RIGHT_MID, -23, 0);
+    lv_obj_add_event_cb(btn, connect_click_cb, LV_EVENT_CLICKED, (void *)scr2);
+
+    lv_obj_t *btn_lbl = lv_label_create(btn);
+    lv_label_set_text(btn_lbl, "CONNECT");
+    lv_obj_set_style_text_color(btn_lbl, page_is_bt ? C_PURE_WHITE : C_DARK_ORANGE, 0);
+    lv_obj_set_style_text_font(btn_lbl, &lv_font_inter_bold_13, 0);
+    lv_obj_set_style_text_letter_space(btn_lbl, 1, 0);
+    lv_obj_center(btn_lbl);
+}
+
+/* dot_opa_anim_cb: mirrors svg-spinners 3-dots-fade @keyframes
+ * Animation runs 0→100 linear over 800ms. At val>=94 (last 6.25% ≈ 50ms)
+ * opacity drops to LV_OPA_20 (0.2), then snaps back at cycle restart. */
+static void dot_opa_anim_cb(void *obj, int32_t val)
+{
+    lv_opa_t opa = (val >= 94) ? LV_OPA_20 : LV_OPA_COVER;
+    lv_obj_set_style_opa((lv_obj_t *)obj, opa, 0);
+}
+
+static void prog_anim_cb(void *obj, int32_t x)
+{
+    lv_obj_set_x((lv_obj_t *)obj, x);
+}
+
+static void overlay_opa_anim_cb(void *obj, int32_t val)
+{
+    lv_obj_set_style_bg_opa((lv_obj_t *)obj, (lv_opa_t)val, 0);
+}
+
+static void obj_opa_anim_cb(void *obj, int32_t val)
+{
+    lv_obj_set_style_opa((lv_obj_t *)obj, (lv_opa_t)val, 0);
+}
+
+static void dot_scale_anim_cb(void *obj, int32_t scale)
+{
+    lv_obj_t *dot = (lv_obj_t *)obj;
+    lv_obj_set_style_transform_scale_x(dot, scale, 0);
+    lv_obj_set_style_transform_scale_y(dot, scale, 0);
+}
+
+static void spinner_rotate_anim_cb(void *obj, int32_t angle)
+{
+    lv_obj_set_style_transform_rotation((lv_obj_t *)obj, angle, 0);
+}
+
+static void result_show_timer_cb(lv_timer_t *t)
+{
+    lv_timer_delete(t);
+    if (!g_p2_result || !g_p2_spinner) return;
+
+    /* Hide spinner */
+    lv_obj_add_flag(g_p2_spinner, LV_OBJ_FLAG_HIDDEN);
+
+    /* Fade in result label: 0→255 over 400ms */
+    lv_anim_t ra;
+    lv_anim_init(&ra);
+    lv_anim_set_exec_cb(&ra, obj_opa_anim_cb);
+    lv_anim_set_var(&ra, g_p2_result);
+    lv_anim_set_values(&ra, 0, 255);
+    lv_anim_set_duration(&ra, 400);
+    lv_anim_start(&ra);
+}
+
+/* Called after success display delay — clean up globals */
+static void success_timer_cb(lv_timer_t *t)
+{
+    lv_timer_delete(t);
+    if (g_connect_btn && lv_obj_is_valid(g_connect_btn)) {
+        lv_obj_set_style_bg_color(g_connect_btn, C_CONNECTED, 0);
+        lv_obj_clear_flag(g_connect_btn, LV_OBJ_FLAG_CLICKABLE);
+        lv_obj_t *btn_lbl = lv_obj_get_child(g_connect_btn, 0);
+        if (btn_lbl) {
+            lv_label_set_text(btn_lbl, "CONNECTED");
+            lv_obj_set_style_text_color(btn_lbl, C_PURE_WHITE, 0);
+        }
+    }
+
+    if (g_p2_overlay && lv_obj_is_valid(g_p2_overlay)) {
+        lv_anim_t oa;
+        lv_anim_init(&oa);
+        lv_anim_set_exec_cb(&oa, overlay_opa_anim_cb);
+        lv_anim_set_var(&oa, g_p2_overlay);
+        lv_anim_set_values(&oa, lv_obj_get_style_bg_opa(g_p2_overlay, 0), 0);
+        lv_anim_set_duration(&oa, 220);
+        lv_anim_set_completed_cb(&oa, overlay_delete_anim_done);
+        lv_anim_start(&oa);
+    } else {
+        g_p2_overlay = NULL;
+        g_p2_spinner = NULL;
+        g_p2_result  = NULL;
+        g_connect_btn = NULL;
+    }
+}
+
+static void overlay_delete_anim_done(lv_anim_t *a)
+{
+    lv_obj_t *overlay = (lv_obj_t *)a->var;
+    if (overlay && lv_obj_is_valid(overlay)) {
+        lv_obj_delete(overlay);
+    }
+    g_p2_overlay = NULL;
+    g_p2_spinner = NULL;
+    g_p2_result  = NULL;
+    g_connect_btn = NULL;
+}
+
+/* CONNECT button click: show loading overlay → after 1.5s show "Successfully Connected" */
+static void connect_click_cb(lv_event_t *e)
+{
+    lv_obj_t *scr = (lv_obj_t *)lv_event_get_user_data(e);
+    if (!scr) return;
+    g_connect_btn = lv_event_get_target(e);
+
+    /* Prevent double-tap */
+    lv_obj_add_flag(scr, LV_OBJ_FLAG_EVENT_BUBBLE); /* block further click propagation */
+
+    /* ── Semi-transparent dimming overlay ── */
+    lv_obj_t *overlay = lv_obj_create(scr);
+    g_p2_overlay = overlay;
+    lv_obj_set_size(overlay, SCREEN_W, SCREEN_H);
+    lv_obj_set_pos(overlay, 0, 0);
+    lv_obj_set_style_bg_color(overlay, C_BLACK, 0);
+    lv_obj_set_style_bg_opa(overlay, 0, 0);
+    lv_obj_set_style_border_width(overlay, 0, 0);
+    lv_obj_set_style_radius(overlay, 0, 0);
+    lv_obj_clear_flag(overlay, LV_OBJ_FLAG_SCROLLABLE);
+
+    /* Fade overlay in: 0→160 in 200ms */
+    lv_anim_t oa;
+    lv_anim_init(&oa);
+    lv_anim_set_exec_cb(&oa, overlay_opa_anim_cb);
+    lv_anim_set_var(&oa, overlay);
+    lv_anim_set_values(&oa, 0, 160);
+    lv_anim_set_duration(&oa, 200);
+    lv_anim_start(&oa);
+
+    /* ── 12-dot rotating spinner centered on overlay ── */
+    lv_obj_t *spinner = lv_obj_create(overlay);
+    g_p2_spinner = spinner;
+    lv_obj_set_size(spinner, 80, 80);
+    lv_obj_center(spinner);
+    lv_obj_set_style_bg_opa(spinner, LV_OPA_TRANSP, 0);
+    lv_obj_set_style_border_width(spinner, 0, 0);
+    lv_obj_set_style_pad_all(spinner, 0, 0);
+    lv_obj_clear_flag(spinner, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_clear_flag(spinner, LV_OBJ_FLAG_CLICKABLE);
+
+    lv_obj_set_style_transform_pivot_x(spinner, 40, 0);
+    lv_obj_set_style_transform_pivot_y(spinner, 40, 0);
+
+    static const int8_t dot_x[12] = {37, 52, 63, 67, 63, 52, 37, 22, 11, 7, 11, 22};
+    static const int8_t dot_y[12] = {7, 11, 22, 37, 52, 63, 67, 63, 52, 37, 22, 11};
+
+    for (int i = 0; i < 12; i++) {
+        lv_obj_t *dot = lv_obj_create(spinner);
+        lv_obj_set_size(dot, 6, 6);
+        lv_obj_set_pos(dot, dot_x[i], dot_y[i]);
+        lv_obj_set_style_radius(dot, LV_RADIUS_CIRCLE, 0);
+        lv_obj_set_style_bg_color(dot, C_PURE_WHITE, 0);
+        lv_obj_set_style_bg_opa(dot, LV_OPA_COVER, 0);
+        lv_obj_set_style_border_width(dot, 0, 0);
+        lv_obj_set_style_pad_all(dot, 0, 0);
+        lv_obj_set_style_transform_pivot_x(dot, 3, 0);
+        lv_obj_set_style_transform_pivot_y(dot, 3, 0);
+
+        lv_anim_t da;
+        lv_anim_init(&da);
+        lv_anim_set_exec_cb(&da, dot_scale_anim_cb);
+        lv_anim_set_var(&da, dot);
+        lv_anim_set_values(&da, 128, 256);
+        lv_anim_set_duration(&da, 300);
+        lv_anim_set_reverse_duration(&da, 300);
+        lv_anim_set_delay(&da, (uint32_t)(i * 100));
+        lv_anim_set_repeat_count(&da, LV_ANIM_REPEAT_INFINITE);
+        lv_anim_start(&da);
+    }
+
+    lv_anim_t sa;
+    lv_anim_init(&sa);
+    lv_anim_set_exec_cb(&sa, spinner_rotate_anim_cb);
+    lv_anim_set_var(&sa, spinner);
+    lv_anim_set_values(&sa, 3600, 0);
+    lv_anim_set_duration(&sa, 6000);
+    lv_anim_set_repeat_count(&sa, LV_ANIM_REPEAT_INFINITE);
+    lv_anim_start(&sa);
+
+    /* ── After 1500ms: hide spinner, show success text ── */
+    /* We use a second overlay label that fades in */
+    lv_obj_t *result_lbl = lv_label_create(overlay);
+    g_p2_result = result_lbl;
+    lv_label_set_text(result_lbl, "Successfully Connected");
+    lv_obj_set_style_text_color(result_lbl, C_PURE_WHITE, 0);
+    lv_obj_set_style_text_font(result_lbl, &lv_font_inter_bold_32, 0);
+    lv_obj_set_style_opa(result_lbl, LV_OPA_TRANSP, 0);
+    lv_obj_align(result_lbl, LV_ALIGN_CENTER, 0, 60);
+
+    /* Trigger success sequence: show result at 1500ms, cleanup at 2500ms */
+    lv_timer_create(result_show_timer_cb, 1500, NULL);
+    lv_timer_create(success_timer_cb, 2500, NULL);
+}
+
+static void build_page2(bool is_bt)
+{
+    /* Deep orange (#F57C00) for ESP-NOW, blue for BT */
+    lv_color_t accent = is_bt ? C_BLUE : C_DEEP_ORANGE;
+
+    lv_obj_t *scr2 = lv_obj_create(NULL);
+    lv_obj_clear_flag(scr2, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_scrollbar_mode(scr2, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_set_style_bg_color(scr2, C_BLACK, 0);
+    lv_obj_set_style_bg_opa(scr2, LV_OPA_COVER, 0);
+    lv_obj_set_style_pad_all(scr2, 0, 0);
+
+    /* Glow circle */
+    lv_obj_t *glow = lv_obj_create(scr2);
+    lv_obj_set_size(glow, P2_GLOW_SIZE, P2_GLOW_SIZE);
+    lv_obj_set_pos(glow, P2_GLOW_X, P2_GLOW_Y);
+    lv_obj_set_style_radius(glow, LV_RADIUS_CIRCLE, 0);
+    lv_obj_set_style_bg_color(glow, accent, 0);
+    lv_obj_set_style_bg_opa(glow, LV_OPA_50, 0);
+    lv_obj_set_style_border_width(glow, 0, 0);
+    lv_obj_set_style_pad_all(glow, 0, 0);
+    lv_obj_clear_flag(glow, LV_OBJ_FLAG_SCROLLABLE);
+
+    /* Finder icon (256×256 source) scaled to ~37px, centered in glow */
+    lv_obj_t *find_icon = lv_img_create(glow);
+    lv_img_set_src(find_icon, &finder);
+    lv_img_set_zoom(find_icon, 37);
+    lv_obj_set_style_blend_mode(find_icon, LV_BLEND_MODE_ADDITIVE, 0);
+    lv_obj_center(find_icon);
+
+    /* Scan text + 3 animated fade-dots in a flex row */
+    lv_obj_t *scan_row = lv_obj_create(scr2);
+    lv_obj_remove_style_all(scan_row);
+    lv_obj_set_pos(scan_row, P2_SCAN_X, P2_SCAN_Y);
+    lv_obj_set_size(scan_row, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+    lv_obj_clear_flag(scan_row, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_layout(scan_row, LV_LAYOUT_FLEX);
+    lv_obj_set_flex_flow(scan_row, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(scan_row, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_set_style_pad_column(scan_row, 6, 0);
+
+    lv_obj_t *lbl_scan = lv_label_create(scan_row);
+    lv_label_set_text(lbl_scan,
+        is_bt ? "SEARCHING FOR NEARBY CARDKB2"
+              : "SEARCHING FOR NEARBY TAB5-NODE");
+    lv_obj_set_style_text_color(lbl_scan, C_PURE_WHITE, 0);
+    lv_obj_set_style_text_font(lbl_scan, &lv_font_inter_regular_32, 0);
+    lv_obj_set_style_text_letter_space(lbl_scan, 1, 0);
+
+    /* 3-dots-fade animation (svg-spinners style) */
+    for (int i = 0; i < 3; i++) {
+        lv_obj_t *fdot = lv_obj_create(scan_row);
+        lv_obj_set_size(fdot, 8, 8);
+        lv_obj_set_style_radius(fdot, LV_RADIUS_CIRCLE, 0);
+        lv_obj_set_style_bg_color(fdot, C_PURE_WHITE, 0);
+        lv_obj_set_style_bg_opa(fdot, LV_OPA_COVER, 0);
+        lv_obj_set_style_border_width(fdot, 0, 0);
+        lv_obj_set_style_pad_all(fdot, 0, 0);
+
+        lv_anim_t da;
+        lv_anim_init(&da);
+        lv_anim_set_exec_cb(&da, dot_opa_anim_cb);
+        lv_anim_set_var(&da, fdot);
+        lv_anim_set_values(&da, 0, 100);
+        lv_anim_set_duration(&da, 800);
+        lv_anim_set_delay(&da, (uint32_t)(i * 150));
+        lv_anim_set_repeat_count(&da, LV_ANIM_REPEAT_INFINITE);
+        lv_anim_start(&da);
+    }
+
+    /* Progress bar */
+    lv_obj_t *prog_bg = lv_obj_create(scr2);
+    lv_obj_remove_style_all(prog_bg);
+    lv_obj_set_size(prog_bg, P2_PROG_W, 8);
+    lv_obj_set_pos(prog_bg, P2_PROG_X, P2_PROG_Y);
+    lv_obj_set_style_bg_color(prog_bg, C_PROGRESS_BG, 0);
+    lv_obj_set_style_bg_opa(prog_bg, LV_OPA_COVER, 0);
+    lv_obj_set_style_radius(prog_bg, 50, 0);
+
+    lv_obj_t *prog_fill = lv_obj_create(prog_bg);
+    lv_obj_remove_style_all(prog_fill);
+    lv_obj_set_size(prog_fill, P2_PROG_CHUNK_W, 8);
+    lv_obj_set_pos(prog_fill, -P2_PROG_CHUNK_W, 0);
+    lv_obj_set_style_bg_color(prog_fill, accent, 0);
+    lv_obj_set_style_bg_opa(prog_fill, LV_OPA_COVER, 0);
+    lv_obj_set_style_radius(prog_fill, 50, 0);
+
+    lv_anim_t pa;
+    lv_anim_init(&pa);
+    lv_anim_set_exec_cb(&pa, prog_anim_cb);
+    lv_anim_set_var(&pa, prog_fill);
+    lv_anim_set_values(&pa, -P2_PROG_CHUNK_W, P2_PROG_W);
+    lv_anim_set_duration(&pa, 1800);
+    lv_anim_set_path_cb(&pa, lv_anim_path_ease_in_out);
+    lv_anim_set_repeat_count(&pa, LV_ANIM_REPEAT_INFINITE);
+    lv_anim_start(&pa);
+
+    /* ── Section heading ──────────────────────────────────────── */
+    lv_obj_t *lbl_heading = lv_label_create(scr2);
+    lv_label_set_text(lbl_heading, "DISCOVERED NETWORK NODES");
+    lv_obj_set_style_text_color(lbl_heading, C_WARM, 0);
+    lv_obj_set_style_text_font(lbl_heading, &lv_font_inter_regular_20, 0);
+    lv_obj_set_style_text_letter_space(lbl_heading, 1, 0);
+    lv_obj_set_style_opa(lbl_heading, LV_OPA_70, 0);
+    lv_obj_set_pos(lbl_heading, P2_HEAD_X, P2_HEAD_Y);
+
+    /* ── Scrollable device list panel ─────────────────────────── */
+    lv_obj_t *panel = lv_obj_create(scr2);
+    lv_obj_remove_style_all(panel);
+    lv_obj_set_size(panel, P2_NODE_W, SCREEN_H - P2_PANEL_Y);
+    lv_obj_set_pos(panel, P2_PANEL_X, P2_PANEL_Y);
+    lv_obj_set_style_pad_all(panel, 0, 0);
+    lv_obj_set_style_pad_row(panel, 16, 0);
+    lv_obj_set_layout(panel, LV_LAYOUT_FLEX);
+    lv_obj_set_flex_flow(panel, LV_FLEX_FLOW_COLUMN);
+    lv_obj_set_flex_align(panel, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START, LV_FLEX_ALIGN_START);
+    lv_obj_set_scrollbar_mode(panel, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_clear_flag(panel, LV_OBJ_FLAG_SCROLL_ELASTIC);
+    lv_obj_add_flag(panel, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_scroll_dir(panel, LV_DIR_VER);
+
+    for (int i = 0; i < N_NODES; i++) {
+        make_node_item(panel, &g_nodes[i], accent, is_bt, scr2);
+    }
+
+    lv_screen_load_anim(scr2, LV_SCREEN_LOAD_ANIM_FADE_IN, 300, 0, false);
+}
+
+/* ── Page 1 entry point ────────────────────────────────────────── */
+void example_lvgl_demo_ui(lv_obj_t *scr)
+{
+    /* Physical display is 720×1280 portrait; rotate 90° so logical space is 1280×720 landscape */
+    lv_display_set_rotation(lv_display_get_default(), LV_DISPLAY_ROTATION_90);
+
+    g_selected   = -1;
+    g_cards[0]   = NULL;
+    g_cards[1]   = NULL;
+
+    /* Screen */
+    lv_obj_clear_flag(scr, LV_OBJ_FLAG_SCROLLABLE);
+    lv_obj_set_scrollbar_mode(scr, LV_SCROLLBAR_MODE_OFF);
+    lv_obj_set_style_bg_color(scr, C_BLACK, 0);
+    lv_obj_set_style_bg_opa(scr, LV_OPA_COVER, 0);
+    lv_obj_set_style_pad_all(scr, 0, 0);
+
+    /* Title row 1: "TAB5" (orange) + " SMART" (white) */
+    lv_obj_t *row1 = lv_obj_create(scr);
+    lv_obj_remove_style_all(row1);
+    lv_obj_set_size(row1, LV_SIZE_CONTENT, LV_SIZE_CONTENT);
+    lv_obj_set_style_pad_all(row1, 0, 0);
+    lv_obj_set_style_pad_column(row1, 0, 0);
+    lv_obj_set_layout(row1, LV_LAYOUT_FLEX);
+    lv_obj_set_flex_flow(row1, LV_FLEX_FLOW_ROW);
+    lv_obj_set_flex_align(row1, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER, LV_FLEX_ALIGN_CENTER);
+    lv_obj_align(row1, LV_ALIGN_TOP_MID, 0, 72);
+
+    lv_obj_t *lbl_tab5 = lv_label_create(row1);
+    lv_label_set_text(lbl_tab5, "TAB5");
+    lv_obj_set_style_text_color(lbl_tab5, C_ORANGE, 0);
+    lv_obj_set_style_text_font(lbl_tab5, &lv_font_inter_bold_48, 0);
+
+    lv_obj_t *lbl_smart = lv_label_create(row1);
+    lv_label_set_text(lbl_smart, " SMART");
+    lv_obj_set_style_text_color(lbl_smart, C_WHITE, 0);
+    lv_obj_set_style_text_font(lbl_smart, &lv_font_inter_bold_48, 0);
+
+    /* Title row 2: "TERMINAL" */
+    lv_obj_t *lbl_term = lv_label_create(scr);
+    lv_label_set_text(lbl_term, "TERMINAL");
+    lv_obj_set_style_text_color(lbl_term, C_WHITE, 0);
+    lv_obj_set_style_text_font(lbl_term, &lv_font_inter_bold_48, 0);
+    lv_obj_align(lbl_term, LV_ALIGN_TOP_MID, 0, 132);
+
+    /* Subtitle */
+    lv_obj_t *lbl_sub = lv_label_create(scr);
+    lv_label_set_text(lbl_sub, "SELECT YOUR CONNECTION METHOD");
+    lv_obj_set_style_text_color(lbl_sub, C_GRAY, 0);
+    lv_obj_set_style_text_font(lbl_sub, &lv_font_inter_light_14, 0);
+    lv_obj_set_style_text_letter_space(lbl_sub, 3, 0);
+    lv_obj_align(lbl_sub, LV_ALIGN_TOP_MID, 0, 200);
+
+    /* Swipe-hint GIF */
+    lv_obj_t *gif = lv_gif_create(scr);
+    lv_gif_set_src(gif, &choose_gif_dsc);
+    lv_obj_set_size(gif, 76, 76);
+    lv_obj_align(gif, LV_ALIGN_TOP_MID, 0, 226);
+
+    /* Two cards */
+    make_card(scr, false, CARD_MARGIN);
+    make_card(scr, true,  CARD_MARGIN + CARD_W + CARD_GAP);
+}
+

@@ -1,0 +1,280 @@
+/* Frame 6 */
+
+position: relative;
+width: 1280px;
+height: 720px;
+
+
+
+/* Group 24 */
+
+position: absolute;
+width: 1280px;
+height: 720px;
+left: 0px;
+top: 0px;
+
+
+
+/* Rectangle 203 */
+
+position: absolute;
+width: 1280px;
+height: 720px;
+left: 0px;
+top: 0px;
+
+background: #000000;
+
+
+/* Discovered Network Nodes */
+
+position: absolute;
+width: 1070px;
+height: 16px;
+left: 105px;
+top: 170px;
+
+font-family: 'Space Grotesk';
+font-style: normal;
+font-weight: 400;
+font-size: 20px;
+line-height: 16px;
+/* identical to box height, or 80% */
+display: flex;
+align-items: center;
+letter-spacing: 1.2px;
+text-transform: uppercase;
+
+color: #DEC1AF;
+
+
+
+/* Rectangle 208 */
+
+position: absolute;
+width: 1070px;
+height: 102px;
+left: 93px;
+top: 218px;
+
+background: #1C1B1B;
+border-radius: 12px;
+
+
+/* Background */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+justify-content: center;
+align-items: center;
+padding: 0px;
+
+position: absolute;
+width: 66px;
+height: 66px;
+left: 120px;
+top: 236px;
+
+background: #2A2A2A;
+border-radius: 8px;
+
+
+/* 节点 1 */
+
+width: 67px;
+height: 67px;
+
+background: url(节点.png);
+transform: matrix(-1, 0, 0, 1, 0, 0);
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+flex-grow: 0;
+
+
+/* NODE-A4F2 */
+
+position: absolute;
+width: 132px;
+height: 20px;
+left: 209px;
+top: 246px;
+
+font-family: 'Space Grotesk';
+font-style: normal;
+font-weight: 700;
+font-size: 24px;
+line-height: 20px;
+/* identical to box height, or 83% */
+display: flex;
+align-items: center;
+
+color: #E5E2E1;
+
+
+
+/* 信号 1 */
+
+position: absolute;
+width: 13px;
+height: 13px;
+left: 211px;
+top: 279px;
+
+background: url(信号.png);
+
+
+/* Container */
+
+/* Auto layout */
+display: flex;
+flex-direction: row;
+align-items: center;
+padding: 0px 0px 2px;
+gap: 4px;
+
+position: absolute;
+width: 64px;
+height: 17px;
+left: 233px;
+top: calc(50% - 17px/2 - 75px);
+
+
+
+/* -42 dBm */
+
+position: absolute;
+width: 64px;
+height: 15px;
+left: 233px;
+top: calc(50% - 15px/2 - 73.5px);
+
+font-family: 'Inter';
+font-style: normal;
+font-weight: 500;
+font-size: 14px;
+line-height: 15px;
+/* identical to box height, or 107% */
+display: flex;
+align-items: center;
+
+color: #DEC1AF;
+
+
+
+/* Button */
+
+/* Auto layout */
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+padding: 8px 16px;
+
+position: absolute;
+width: 108px;
+height: 51px;
+left: 1032px;
+top: 243px;
+
+background: #F57C00;
+border-radius: 8px;
+
+
+/* CONNECT */
+
+width: 76px;
+height: 15px;
+
+font-family: 'Space Grotesk';
+font-style: normal;
+font-weight: 700;
+font-size: 15px;
+line-height: 15px;
+/* identical to box height, or 100% */
+display: flex;
+align-items: center;
+text-align: center;
+letter-spacing: 0.5px;
+text-transform: uppercase;
+
+color: #572800;
+
+
+/* Inside auto layout */
+flex: none;
+order: 0;
+align-self: stretch;
+flex-grow: 0;
+
+
+/* Ellipse 77 */
+
+position: absolute;
+width: 69px;
+height: 69px;
+left: 93px;
+top: 43px;
+
+background: rgba(245, 124, 0, 0.5);
+
+
+/* 查找设备 1 */
+
+position: absolute;
+width: 37px;
+height: 37px;
+left: 109px;
+top: 59px;
+
+background: url(查找设备.png);
+
+
+/* Searching for nearby CardKB2.......... */
+
+position: absolute;
+width: 655px;
+height: 16px;
+left: 185px;
+top: 59px;
+
+font-family: 'Space Grotesk';
+font-style: normal;
+font-weight: 400;
+font-size: 32px;
+line-height: 16px;
+/* identical to box height, or 50% */
+display: flex;
+align-items: center;
+letter-spacing: 1.2px;
+text-transform: uppercase;
+
+color: #FFFFFF;
+
+
+
+/* Rectangle 205 */
+
+position: absolute;
+width: 540px;
+height: 8px;
+left: 185px;
+top: 99px;
+
+background: #D9D9D9;
+border-radius: 50px;
+
+
+/* Rectangle 206 */
+
+position: absolute;
+width: 98px;
+height: 8px;
+left: 185px;
+top: 99px;
+
+background: #F57C00;
+border-radius: 50px;

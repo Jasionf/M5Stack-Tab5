@@ -1,0 +1,13 @@
+{
+    "idf.currentSetup": "/Users/jason/esp/v5.5.1/esp-idf",
+    "idf.openOcdConfigs": [
+        "board/esp32p4-builtin.cfg"
+    ],
+    "idf.customExtraVars": {
+        "OPENOCD_SCRIPTS": "/Users/jason/.espressif/tools/openocd-esp32/v0.12.0-esp32-20240318/openocd-esp32/share/openocd/scripts",
+        "ESP_ROM_ELF_DIR": "/Users/jason/.espressif/tools/esp-rom-elfs/20240305/",
+        "IDF_TARGET": "esp32p4"
+    },
+    "idf.port": "/dev/tty.usbmodem1301",
+    "idf.flashType": "UART"
+}

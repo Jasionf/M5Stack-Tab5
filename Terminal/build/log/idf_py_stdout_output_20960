@@ -1,0 +1,1941 @@
+Command: /Users/jason/.espressif/python_env/idf5.5_py3.10_env/bin/python /Users/jason/esp/v5.5.1/esp-idf/tools/idf_monitor.py -p /dev/cu.usbmodem1301 -b 115200 --toolchain-prefix riscv32-esp-elf- --target esp32p4 --revision 1 --decode-panic backtrace /Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build/TerminalDemo.elf /Users/jason/Documents/Demo_Tab5andcardKB2/TerminalDemo/build/bootloader/bootloader.elf -m '/Users/jason/.espressif/python_env/idf5.5_py3.10_env/bin/python' '/Users/jason/esp/v5.5.1/esp-idf/tools/idf.py' '-p' '/dev/cu.usbmodem1301'
+ESP-ROM:esp32p4-eco2-20240710
+Build:Jul 10 2024
+rst:0x17 (CHIP_USB_UART_RESET),boot:0x20c (SPI_FAST_FLASH_BOOT)
+Core0 Saved PC:0x4fc04214
+Core1 Saved PC:0x4fc058e0
+SPI mode:DIO, clock div:1
+load:0x4ff33ce0,len:0x164c
+load:0x4ff29ed0,len:0xdfc
+load:0x4ff2cbd0,len:0x336c
+entry 0x4ff29eda
+[0;32mI (28) boot: ESP-IDF v5.5.1-dirty 2nd stage bootloader[0m
+[0;32mI (28) boot: compile time Mar 30 2026 18:26:12[0m
+[0;32mI (29) boot: Multicore bootloader[0m
+[0;32mI (30) boot: chip revision: v1.0[0m
+[0;32mI (31) boot: efuse block revision: v0.3[0m
+[0;32mI (35) boot.esp32p4: SPI Speed      : 80MHz[0m
+[0;32mI (39) boot.esp32p4: SPI Mode       : DIO[0m
+[0;32mI (43) boot.esp32p4: SPI Flash Size : 16MB[0m
+[0;32mI (46) boot: Enabling RNG early entropy source...[0m
+[0;32mI (51) boot: Partition Table:[0m
+[0;32mI (53) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (60) boot:  0 nvs              WiFi data        01 02 00009000 00006000[0m
+[0;32mI (66) boot:  1 phy_init         RF data          01 01 0000f000 00001000[0m
+[0;32mI (73) boot:  2 factory          factory app      00 00 00010000 00f00000[0m
+[0;32mI (80) boot: End of partition table[0m
+[0;32mI (83) esp_image: segment 0: paddr=00010020 vaddr=400f0020 size=85860h (546912) map[0m
+[0;32mI (167) esp_image: segment 1: paddr=00095888 vaddr=30100000 size=00068h (   104) load[0m
+[0;32mI (169) esp_image: segment 2: paddr=000958f8 vaddr=4ff00000 size=0a720h ( 42784) load[0m
+[0;32mI (179) esp_image: segment 3: paddr=000a0020 vaddr=40000020 size=e5440h (939072) map[0m
+[0;32mI (311) esp_image: segment 4: paddr=00185468 vaddr=4ff0a720 size=0dc30h ( 56368) load[0m
+[0;32mI (322) esp_image: segment 5: paddr=001930a0 vaddr=4ff18380 size=03738h ( 14136) load[0m
+[0;32mI (326) esp_image: segment 6: paddr=001967e0 vaddr=50108080 size=00020h (    32) load[0m
+[0;32mI (333) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (333) boot: Disabling RNG early entropy source...[0m
+[0;32mI (350) hex_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (350) hex_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (351) hex_psram: DriveStr.    : 0x00 (25 Ohm)[0m
+[0;32mI (351) hex_psram: dev id       : 0x03 (generation 4)[0m
+[0;32mI (356) hex_psram: density      : 0x07 (256 Mbit)[0m
+[0;32mI (360) hex_psram: good-die     : 0x06 (Pass)[0m
+[0;32mI (364) hex_psram: SRF          : 0x02 (Slow Refresh)[0m
+[0;32mI (369) hex_psram: BurstType    : 0x00 ( Wrap)[0m
+[0;32mI (373) hex_psram: BurstLen     : 0x03 (2048 Byte)[0m
+[0;32mI (378) hex_psram: BitMode      : 0x01 (X16 Mode)[0m
+[0;32mI (382) hex_psram: Readlatency  : 0x04 (14 cycles@Fixed)[0m
+[0;32mI (387) hex_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (392) MSPI DQS: tuning success, best phase id is 0[0m
+[0;32mI (569) MSPI DQS: tuning success, best delayline id is 16[0m
+[0;32mI (569) esp_psram: Found 32MB PSRAM device[0m
+[0;32mI (570) esp_psram: Speed: 200MHz[0m
+[0;32mI (571) hex_psram: psram CS IO is dedicated[0m
+[0;32mI (573) cpu_start: Multicore app[0m
+[0;32mI (1526) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (1536) cpu_start: Pro cpu start user code[0m
+[0;32mI (1536) cpu_start: cpu freq: 360000000 Hz[0m
+[0;32mI (1537) app_init: Application information:[0m
+[0;32mI (1537) app_init: Project name:     TerminalDemo[0m
+[0;32mI (1541) app_init: App version:      1[0m
+[0;32mI (1544) app_init: Compile time:     Mar 30 2026 18:25:04[0m
+[0;32mI (1550) app_init: ELF file SHA256:  1cc5c54dd...[0m
+[0;32mI (1554) app_init: ESP-IDF:          v5.5.1-dirty[0m
+[0;32mI (1558) efuse_init: Min chip rev:     v0.1[0m
+[0;32mI (1562) efuse_init: Max chip rev:     v1.99 [0m
+[0;32mI (1566) efuse_init: Chip rev:         v1.0[0m
+[0;32mI (1570) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (1577) heap_init: At 4FF207D0 len 0001A7F0 (105 KiB): RAM[0m
+[0;32mI (1582) heap_init: At 4FF3AFC0 len 00004BF0 (18 KiB): RAM[0m
+[0;32mI (1587) heap_init: At 4FF40000 len 00060000 (384 KiB): RAM[0m
+[0;32mI (1593) heap_init: At 501080A0 len 00007F60 (31 KiB): RTCRAM[0m
+[0;32mI (1598) heap_init: At 30100068 len 00001F98 (7 KiB): TCM[0m
+[0;32mI (1603) esp_psram: Adding pool of 32768K of PSRAM memory to heap allocator[0m
+[0;32mI (1611) spi_flash: detected chip: generic[0m
+[0;32mI (1614) spi_flash: flash io: dio[0m
+[0;32mI (1617) host_init: ESP Hosted : Host chip_ip[18][0m
+[0;32mI (1621) H_API: ESP-Hosted starting. Hosted_Tasks: prio:23, stack: 5120 RPC_task_stack: 5120[0m
+sdio_mempool_create free:33690452 min-free:33690452 lfb-def:33030144 lfb-8bit:33030144
+
+[0;32mI (1638) H_API: ** add_esp_wifi_remote_channels **[0m
+[0;32mI (1642) transport: Add ESP-Hosted channel IF[1]: S[0] Tx[0x4000f994] Rx[0x4001f342][0m
+[0;32mI (1649) transport: Add ESP-Hosted channel IF[2]: S[0] Tx[0x4000f8dc] Rx[0x4001f342][0m
+[0;32mI (1657) main_task: Started on CPU0[0m
+[0;32mI (1667) esp_psram: Reserving pool of 32K of internal memory for DMA/internal allocations[0m
+[0;32mI (1667) main_task: Calling app_main()[0m
+[0;32mI (1667) LVGL: Starting LVGL task[0m
+[0;33mW (1677) ledc: GPIO 22 is not usable, maybe conflict with others[0m
+[0;32mI (1677) m5stack_tab5: MIPI DSI PHY Powered on[0m
+[0;32mI (1687) m5stack_tab5: Install MIPI DSI LCD control panel[0m
+[0;32mI (1727) ili9881c: ID1: 0x98, ID2: 0x81, ID3: 0x5c[0m
+[1;31mE (1847) lcd_panel: esp_lcd_panel_swap_xy(50): swap_xy is not supported by this panel[0m
+[0;32mI (1847) m5stack_tab5: Display initialized with resolution 720x1280[0m
+[0;32mI (1847) GT911: I2C address initialization procedure skipped - using default GT9xx setup[0m
+[0;32mI (1857) GT911: TouchPad_ID:0x39,0x31,0x31[0m
+[0;32mI (1857) GT911: TouchPad_Config_Version:80[0m
+[0;32mI (1877) main: Display LVGL animation[0m
+[0;32mI (1897) m5stack_tab5: Setting LCD backlight: 100%[0m
+[0;32mI (2047) transport: Attempt connection with slave: retry[0][0m
+[0;32mI (2047) transport: Reset slave using GPIO[15][0m
+[0;32mI (2047) os_wrapper_esp: GPIO [15] configured[0m
+[0;32mI (3157) sdio_wrapper: SDIO master: Data-Lines: 4-bit Freq(KHz)[40000 KHz][0m
+[0;32mI (3157) sdio_wrapper: GPIOs: CLK[12] CMD[13] D0[11] D1[10] D2[9] D3[8] Slave_Reset[15][0m
+[0;32mI (3157) sdio_wrapper: Queues: Tx[20] Rx[20] SDIO-Rx-Mode[1][0m
+[0;32mI (3157) H_SDIO_DRV: Starting SDIO process rx task[0m
+Name: 
+Type: SDIO
+Speed: 40.00 MHz (limit: 40.00 MHz)
+Size: 0MB
+CSD: ver=1, sector_size=0, capacity=0 read_bl_len=0
+SCR: sd_spec=0, bus_width=0
+TUPLE: DEVICE, size: 3: D9 01 FF 
+TUPLE: MANFID, size: 4
+  MANF: 0092, CARD: 6666
+TUPLE: FUNCID, size: 2: 0C 00 
+TUPLE: FUNCE, size: 4: 00 00 02 32 
+TUPLE: CONFIG, size: 5: 01 01 00 02 07 
+TUPLE: CFTABLE_ENTRY, size: 8
+  INDX: C1, Intface: 1, Default: 1, Conf-Entry-Num: 1
+  IF: 41
+  FS: 30, misc: 0, mem_space: 1, irq: 1, io_space: 0, timing: 0, power: 0
+  IR: 30, mask: 1,   IRQ: FF FF
+  LEN: FFFF
+TUPLE: END
+[0;32mI (3237) sdio_wrapper: Function 0 Blocksize: 512[0m
+[0;32mI (3237) sdio_wrapper: Function 1 Blocksize: 512[0m
+[0;32mI (3247) H_SDIO_DRV: SDIO Host operating in STREAMING MODE[0m
+[0;32mI (3247) H_SDIO_DRV: generate slave intr[0m
+[0;32mI (3257) transport: Received INIT event from ESP32 peripheral[0m
+[0;32mI (3257) transport: EVENT: 12[0m
+[0;32mI (3257) transport: EVENT: 11[0m
+[0;32mI (3257) transport: capabilities: 0xd[0m
+[0;32mI (3267) transport: Features supported are:[0m
+[0;32mI (3267) transport: 	 * WLAN[0m
+[0;32mI (3267) transport: 	   - HCI over SDIO[0m
+[0;32mI (3277) transport: 	   - BLE only[0m
+[0;32mI (3277) transport: EVENT: 13[0m
+[0;32mI (3277) transport: ESP board type is : 13 [0m
+
+[0;32mI (3287) transport: Base transport is set-up[0m
+
+[0;32mI (3287) transport: Slave chip Id[12][0m
+[0;32mI (3297) vhci_drv: Host BT Support: Enabled[0m
+[0;32mI (3297) vhci_drv: 	BT Transport Type: VHCI[0m
+[0;32mI (3297) H_SDIO_DRV: Received INIT event[0m
+[0;33mW (4357) wireless_mgr: ESP-NOW not supported on ESP32-P4[0m
+[0;32mI (4357) transport: Attempt connection with slave: retry[0][0m
+[0;32mI (4357) transport: Transport is already up[0m
+[0;32mI (4367) ble_mgr: NimBLE host task started[0m
+[0;32mI (4367) wireless_mgr: Wireless stack ready (WiFi:OK BLE:OK)[0m
+[0;32mI (4377) main_task: Returned from app_main()[0m
+[0;32mI (4387) NimBLE: Failed to restore IRKs from store; status=8[0m
+
+[0;32mI (4387) ble_mgr: BLE host synchronized with controller[0m
+[0;32mI (5937) NimBLE: GAP procedure initiated: discovery; [0m
+[0;32mI (5937) NimBLE: own_addr_type=0 filter_policy=0 passive=1 limited=0 filter_duplicates=1 [0m
+[0;32mI (5937) NimBLE: duration=5000ms[0m
+[0;32mI (5947) NimBLE: [0m
+
+[0;32mI (5947) ble_mgr: BLE scan started (passive, low-duty, no-filter, dedup)[0m
+[0;32mI (6147) ble_mgr: Target CardKB2 discovered: 88:56:A6:C3:02:56 addrtype=0 rssi=-41[0m
+[0;32mI (6217) ui/page2: refresh_node_list: got 15 nodes, is_bt=1[0m
+[0;32mI (6217) ui/page2: Node[0]: name='0D:B5:B0:EB:D6:F7' is_bt=1[0m
+[0;32mI (6227) ui/page2: Node[1]: name='74:20:5D:48:90:D9' is_bt=1[0m
+[0;32mI (6247) ui/page2: Node[2]: name='5D:FA:DE:05:81:63' is_bt=1[0m
+[0;32mI (6257) ui/page2: Node[3]: name='72:08:7D:C6:10:F6' is_bt=1[0m
+[0;32mI (6267) ui/page2: Node[4]: name='67:67:6A:BA:3C:3E' is_bt=1[0m
+[0;32mI (6277) ui/page2: Node[5]: name='D0:AE:05:0B:9A:84' is_bt=1[0m
+[0;32mI (6287) ui/page2: Node[6]: name='50:FE:1D:D4:CF:BC' is_bt=1[0m
+[0;32mI (6297) ui/page2: Node[7]: name='50:E4:78:22:DC:0C' is_bt=1[0m
+[0;32mI (6307) ui/page2: Node[8]: name='6D:42:0B:25:6A:56' is_bt=1[0m
+[0;32mI (6307) ui/page2: Node[9]: name='06:98:B0:8D:D2:B7' is_bt=1[0m
+[0;32mI (6317) ui/page2: Node[10]: name='CardKB2-0256' is_bt=1[0m
+[0;32mI (6327) ui/page2: Node[11]: name='78:2E:F9:EF:19:FD' is_bt=1[0m
+[0;32mI (6337) ui/page2: Node[12]: name='5B:BD:72:0F:17:90' is_bt=1[0m
+[0;32mI (6347) ui/page2: Node[13]: name='55:55:DB:D1:71:C3' is_bt=1[0m
+[0;32mI (6357) ui/page2: Node[14]: name='4C:13:EB:A5:83:CD' is_bt=1[0m
+[0;32mI (6367) ui/page2: Shown 15 nodes[0m
+[0;32mI (6577) ui/page2: refresh_node_list: got 21 nodes, is_bt=1[0m
+[0;32mI (6587) ui/page2: Node[0]: name='0D:B5:B0:EB:D6:F7' is_bt=1[0m
+[0;32mI (6597) ui/page2: Node[1]: name='74:20:5D:48:90:D9' is_bt=1[0m
+[0;32mI (6607) ui/page2: Node[2]: name='5D:FA:DE:05:81:63' is_bt=1[0m
+[0;32mI (6617) ui/page2: Node[3]: name='72:08:7D:C6:10:F6' is_bt=1[0m
+[0;32mI (6627) ui/page2: Node[4]: name='67:67:6A:BA:3C:3E' is_bt=1[0m
+[0;32mI (6637) ui/page2: Node[5]: name='D0:AE:05:0B:9A:84' is_bt=1[0m
+[0;32mI (6647) ui/page2: Node[6]: name='50:FE:1D:D4:CF:BC' is_bt=1[0m
+[0;32mI (6657) ui/page2: Node[7]: name='50:E4:78:22:DC:0C' is_bt=1[0m
+[0;32mI (6667) ui/page2: Node[8]: name='6D:42:0B:25:6A:56' is_bt=1[0m
+[0;32mI (6677) ui/page2: Node[9]: name='06:98:B0:8D:D2:B7' is_bt=1[0m
+[0;32mI (6687) ui/page2: Node[10]: name='CardKB2-0256' is_bt=1[0m
+[0;32mI (6697) ui/page2: Node[11]: name='78:2E:F9:EF:19:FD' is_bt=1[0m
+[0;32mI (6707) ui/page2: Node[12]: name='5B:BD:72:0F:17:90' is_bt=1[0m
+[0;32mI (6717) ui/page2: Node[13]: name='55:55:DB:D1:71:C3' is_bt=1[0m
+[0;32mI (6727) ui/page2: Node[14]: name='4C:13:EB:A5:83:CD' is_bt=1[0m
+[0;32mI (6737) ui/page2: Node[15]: name='5A:17:06:F4:91:93' is_bt=1[0m
+[0;32mI (6747) ui/page2: Node[16]: name='37:6F:5C:25:CC:2E' is_bt=1[0m
+[0;32mI (6757) ui/page2: Node[17]: name='6E:F0:BA:2D:D8:F9' is_bt=1[0m
+[0;32mI (6767) ui/page2: Node[18]: name='4A:28:FA:F1:3A:80' is_bt=1[0m
+[0;32mI (6777) ui/page2: Node[19]: name='62:E9:76:74:07:1F' is_bt=1[0m
+[0;32mI (6787) ui/page2: Node[20]: name='7D:E8:A0:EB:62:95' is_bt=1[0m
+[0;32mI (6797) ui/page2: Shown 21 nodes[0m
+[0;32mI (6907) ui/page2: refresh_node_list: got 23 nodes, is_bt=1[0m
+[0;32mI (6917) ui/page2: Node[0]: name='0D:B5:B0:EB:D6:F7' is_bt=1[0m
+[0;32mI (6927) ui/page2: Node[1]: name='74:20:5D:48:90:D9' is_bt=1[0m
+[0;32mI (6937) ui/page2: Node[2]: name='5D:FA:DE:05:81:63' is_bt=1[0m
+[0;32mI (6947) ui/page2: Node[3]: name='72:08:7D:C6:10:F6' is_bt=1[0m
+[0;32mI (6957) ui/page2: Node[4]: name='67:67:6A:BA:3C:3E' is_bt=1[0m
+[0;32mI (6967) ui/page2: Node[5]: name='D0:AE:05:0B:9A:84' is_bt=1[0m
+[0;32mI (6977) ui/page2: Node[6]: name='50:FE:1D:D4:CF:BC' is_bt=1[0m
+[0;32mI (6987) ui/page2: Node[7]: name='50:E4:78:22:DC:0C' is_bt=1[0m
+[0;32mI (6997) ui/page2: Node[8]: name='6D:42:0B:25:6A:56' is_bt=1[0m
+[0;32mI (7007) ui/page2: Node[9]: name='06:98:B0:8D:D2:B7' is_bt=1[0m
+[0;32mI (7017) ui/page2: Node[10]: name='CardKB2-0256' is_bt=1[0m
+[0;32mI (7027) ui/page2: Node[11]: name='78:2E:F9:EF:19:FD' is_bt=1[0m
+[0;32mI (7037) ui/page2: Node[12]: name='5B:BD:72:0F:17:90' is_bt=1[0m
+[0;32mI (7047) ui/page2: Node[13]: name='55:55:DB:D1:71:C3' is_bt=1[0m
+[0;32mI (7057) ui/page2: Node[14]: name='4C:13:EB:A5:83:CD' is_bt=1[0m
+[0;32mI (7067) ui/page2: Node[15]: name='5A:17:06:F4:91:93' is_bt=1[0m
+[0;32mI (7077) ui/page2: Node[16]: name='37:6F:5C:25:CC:2E' is_bt=1[0m
+[0;32mI (7087) ui/page2: Node[17]: name='6E:F0:BA:2D:D8:F9' is_bt=1[0m
+[0;32mI (7097) ui/page2: Node[18]: name='4A:28:FA:F1:3A:80' is_bt=1[0m
+[0;32mI (7107) ui/page2: Node[19]: name='62:E9:76:74:07:1F' is_bt=1[0m
+[0;32mI (7117) ui/page2: Node[20]: name='7D:E8:A0:EB:62:95' is_bt=1[0m
+[0;32mI (7127) ui/page2: Node[21]: name='4F:A1:FF:F8:46:C0' is_bt=1[0m
+[0;32mI (7137) ui/page2: Node[22]: name='41:27:82:15:72:14' is_bt=1[0m
+[0;32mI (7147) ui/page2: Shown 23 nodes[0m
+[0;32mI (7227) ui/page2: refresh_node_list: got 28 nodes, is_bt=1[0m
+[0;32mI (7237) ui/page2: Node[0]: name='0D:B5:B0:EB:D6:F7' is_bt=1[0m
+[0;32mI (7247) ui/page2: Node[1]: name='74:20:5D:48:90:D9' is_bt=1[0m
+[0;32mI (7257) ui/page2: Node[2]: name='5D:FA:DE:05:81:63' is_bt=1[0m
+[0;32mI (7267) ui/page2: Node[3]: name='72:08:7D:C6:10:F6' is_bt=1[0m
+[0;32mI (7277) ui/page2: Node[4]: name='67:67:6A:BA:3C:3E' is_bt=1[0m
+[0;32mI (7287) ui/page2: Node[5]: name='D0:AE:05:0B:9A:84' is_bt=1[0m
+[0;32mI (7297) ui/page2: Node[6]: name='50:FE:1D:D4:CF:BC' is_bt=1[0m
+[0;32mI (7307) ui/page2: Node[7]: name='50:E4:78:22:DC:0C' is_bt=1[0m
+[0;32mI (7317) ui/page2: Node[8]: name='6D:42:0B:25:6A:56' is_bt=1[0m
+[0;32mI (7327) ui/page2: Node[9]: name='06:98:B0:8D:D2:B7' is_bt=1[0m
+[0;32mI (7337) ui/page2: Node[10]: name='CardKB2-0256' is_bt=1[0m
+[0;32mI (7347) ui/page2: Node[11]: name='78:2E:F9:EF:19:FD' is_bt=1[0m
+[0;32mI (7357) ui/page2: Node[12]: name='5B:BD:72:0F:17:90' is_bt=1[0m
+[0;32mI (7367) ui/page2: Node[13]: name='55:55:DB:D1:71:C3' is_bt=1[0m
+[0;32mI (7377) ui/page2: Node[14]: name='4C:13:EB:A5:83:CD' is_bt=1[0m
+[0;32mI (7387) ui/page2: Node[15]: name='5A:17:06:F4:91:93' is_bt=1[0m
+[0;32mI (7397) ui/page2: Node[16]: name='37:6F:5C:25:CC:2E' is_bt=1[0m
+[0;32mI (7407) ui/page2: Node[17]: name='6E:F0:BA:2D:D8:F9' is_bt=1[0m
+[0;32mI (7417) ui/page2: Node[18]: name='4A:28:FA:F1:3A:80' is_bt=1[0m
+[0;32mI (7427) ui/page2: Node[19]: name='62:E9:76:74:07:1F' is_bt=1[0m
+[0;32mI (7437) ui/page2: Node[20]: name='7D:E8:A0:EB:62:95' is_bt=1[0m
+[0;32mI (7447) ui/page2: Node[21]: name='4F:A1:FF:F8:46:C0' is_bt=1[0m
+[0;32mI (7447) ble_mgr: Target CardKB2 discovered: 88:56:A6:C3:02:56 addrtype=0 rssi=-32[0m
+[0;32mI (7457) ui/page2: Node[22]: name='41:27:82:15:72:14' is_bt=1[0m
+[0;32mI (7467) ui/page2: Node[23]: name='GVH5086A66F' is_bt=1[0m
+[0;32mI (7477) ui/page2: Node[24]: name='40:78:5C:FF:E6:1A' is_bt=1[0m
+[0;32mI (7487) ui/page2: Node[25]: name='4C:48:0B:59:6C:F6' is_bt=1[0m
+[0;32mI (7497) ui/page2: Node[26]: name='4F:14:64:0B:B7:43' is_bt=1[0m
+[0;32mI (7507) ui/page2: Node[27]: name='12:4A:6A:92:36:54' is_bt=1[0m
+[0;32mI (7517) ui/page2: Shown 28 nodes[0m
+[0;32mI (7597) ui/page2: refresh_node_list: got 32 nodes, is_bt=1[0m
+[0;32mI (7607) ui/page2: Node[0]: name='0D:B5:B0:EB:D6:F7' is_bt=1[0m
+[0;32mI (7617) ui/page2: Node[1]: name='74:20:5D:48:90:D9' is_bt=1[0m
+[0;32mI (7627) ui/page2: Node[2]: name='5D:FA:DE:05:81:63' is_bt=1[0m
+[0;32mI (7637) ui/page2: Node[3]: name='72:08:7D:C6:10:F6' is_bt=1[0m
+[0;32mI (7657) ui/page2: Node[4]: name='67:67:6A:BA:3C:3E' is_bt=1[0m
+[0;32mI (7667) ui/page2: Node[5]: name='D0:AE:05:0B:9A:84' is_bt=1[0m
+[0;32mI (7667) ui/page2: Node[6]: name='50:FE:1D:D4:CF:BC' is_bt=1[0m
+[0;32mI (7677) ui/page2: Node[7]: name='50:E4:78:22:DC:0C' is_bt=1[0m
+[0;32mI (7687) ui/page2: Node[8]: name='6D:42:0B:25:6A:56' is_bt=1[0m
+[0;32mI (7697) ui/page2: Node[9]: name='06:98:B0:8D:D2:B7' is_bt=1[0m
+[0;32mI (7707) ui/page2: Node[10]: name='CardKB2-0256' is_bt=1[0m
+[0;32mI (7717) ui/page2: Node[11]: name='78:2E:F9:EF:19:FD' is_bt=1[0m
+[0;32mI (7727) ui/page2: Node[12]: name='5B:BD:72:0F:17:90' is_bt=1[0m
+[0;32mI (7737) ui/page2: Node[13]: name='55:55:DB:D1:71:C3' is_bt=1[0m
+[0;32mI (7747) ui/page2: Node[14]: name='4C:13:EB:A5:83:CD' is_bt=1[0m
+[0;32mI (7757) ui/page2: Node[15]: name='5A:17:06:F4:91:93' is_bt=1[0m
+[0;32mI (7767) ui/page2: Node[16]: name='37:6F:5C:25:CC:2E' is_bt=1[0m
+[0;32mI (7777) ui/page2: Node[17]: name='6E:F0:BA:2D:D8:F9' is_bt=1[0m
+[0;32mI (7787) ui/page2: Node[18]: name='4A:28:FA:F1:3A:80' is_bt=1[0m
+[0;32mI (7797) ui/page2: Node[19]: name='62:E9:76:74:07:1F' is_bt=1[0m
+[0;32mI (7807) ui/page2: Node[20]: name='7D:E8:A0:EB:62:95' is_bt=1[0m
+[0;32mI (7817) ui/page2: Node[21]: name='4F:A1:FF:F8:46:C0' is_bt=1[0m
+[0;32mI (7827) ui/page2: Node[22]: name='41:27:82:15:72:14' is_bt=1[0m
+[0;32mI (7837) ui/page2: Node[23]: name='GVH5086A66F' is_bt=1[0m
+[0;32mI (7847) ui/page2: Node[24]: name='40:78:5C:FF:E6:1A' is_bt=1[0m
+[0;32mI (7857) ui/page2: Node[25]: name='4C:48:0B:59:6C:F6' is_bt=1[0m
+[0;32mI (7867) ui/page2: Node[26]: name='4F:14:64:0B:B7:43' is_bt=1[0m
+[0;32mI (7877) ui/page2: Node[27]: name='12:4A:6A:92:36:54' is_bt=1[0m
+[0;32mI (7887) ui/page2: Node[28]: name='06:54:88:B3:66:53' is_bt=1[0m
+[0;32mI (7897) ui/page2: Node[29]: name='3A:42:BC:DC:3A:76' is_bt=1[0m
+[0;32mI (7907) ui/page2: Node[30]: name='01:2A:34:44:D9:58' is_bt=1[0m
+[0;32mI (7917) ui/page2: Node[31]: name='2F:A2:F1:00:92:B0' is_bt=1[0m
+[0;32mI (7927) ui/page2: Shown 32 nodes[0m
+[0;32mI (8457) ble_mgr: Target CardKB2 discovered: 88:56:A6:C3:02:56 addrtype=0 rssi=-35[0m
+[0;32mI (8567) ui_page3: BLE connect requested: 88:56:A6:C3:02:56 type=0 name='CardKB2 (Direct MAC)'[0m
+[0;32mI (8577) NimBLE: GAP procedure initiated: connect; [0m
+[0;32mI (8577) NimBLE: peer_addr_type=0 peer_addr=[0m
+[0;32mI (8577) NimBLE: 88:56:a6:c3:02:56[0m
+[0;32mI (8577) NimBLE:  scan_itvl=96 scan_window=48 itvl_min=24 itvl_max=40 latency=0 supervision_timeout=256 min_ce_len=16 max_ce_len=768 own_addr_type=0[0m
+[0;32mI (8597) NimBLE: [0m
+
+[0;32mI (8597) ble_mgr: BLE connecting to 88:56:A6:C3:02:56 (type=0)[0m
+[0;32mI (8817) ble_mgr: BLE connected handle=0 — updating connection params…[0m
+[0;32mI (8827) NimBLE: GAP procedure initiated: [0m
+[0;32mI (8827) NimBLE: connection parameter update; conn_handle=0 itvl_min=24 itvl_max=40 latency=0 supervision_timeout=500 min_ce_len=0 max_ce_len=0[0m
+[0;32mI (8837) NimBLE: [0m
+
+[0;32mI (8837) ble_mgr: Connection params update: OK[0m
+[0;33mW (8837) ble_mgr: ble_gap_security_initiate: 8 — discovering HID directly[0m
+[0;32mI (8847) NimBLE: GATT procedure initiated: discover service by uuid; uuid=[0m
+[0;32mI (8857) NimBLE: 0x1812[0m
+[0;32mI (8857) NimBLE: [0m
+
+[0;32mI (8917) ble_mgr: HID service found (start=52 end=65535), discovering chars…[0m
+[0;32mI (8917) NimBLE: GATT procedure initiated: discover all characteristics; [0m
+[0;32mI (8917) NimBLE: start_handle=52 end_handle=65535[0m
+
+[0;32mI (9117) ble_mgr: Report chr found (val_handle=64 props=0x12), discovering CCCD…[0m
+[0;32mI (9117) NimBLE: GATT procedure initiated: discover all descriptors; [0m
+[0;32mI (9117) NimBLE: chr_val_handle=65 end_handle=65535[0m
+
+[0;32mI (9217) ble_mgr: Writing CCCD (handle=69) with Notify+Indicate…[0m
+[0;32mI (9217) NimBLE: GATT procedure initiated: write; [0m
+[0;32mI (9217) NimBLE: att_handle=69 len=2[0m
+
+[0;32mI (9267) ble_mgr: Connection params updated: status=0[0m
+[0;32mI (9417) ble_mgr: HID notifications enabled for CardKB2 ✓[0m
+[1;31mE (27817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (27817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (27817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (27817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (27917) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (27917) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (27967) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (27967) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (28117) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (28117) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (28467) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (28467) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (28467) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (28467) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (28717) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (28717) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (28717) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (28717) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (28917) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (28917) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (28967) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (28967) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (29117) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (29117) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (29317) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (29317) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (29317) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (29317) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (29517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (29517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (29567) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (29567) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (29717) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (29717) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (30367) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (30367) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (30567) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (30567) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (30867) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (30867) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (31017) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (31017) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (31317) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (31317) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (31317) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (31317) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (31617) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (31617) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (31667) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (31667) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (31867) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (31867) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (32317) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (32317) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (32567) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (32567) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (32717) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (32717) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (32967) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (32967) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (33017) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (33017) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (33167) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (33167) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (33267) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (33267) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (33417) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (33417) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (33517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (33517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (33617) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (33617) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (33667) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (33667) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (33817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (33817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (33917) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (33917) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (34067) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (34067) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (34267) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (34267) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (34367) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (34367) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (34517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (34517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (34517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (34517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (34667) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (34667) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (34717) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (34717) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (34767) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (34767) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (38017) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (38017) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (38217) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (38217) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (38417) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (38417) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (38667) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (38667) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (39167) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (39167) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (39317) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (39317) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (44217) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (44217) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (44367) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (44367) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (44517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (44517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (44567) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (44567) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (44617) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (44617) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (44867) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (44867) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (45017) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (45017) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (45167) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (45167) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (45267) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (45267) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (45417) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (45417) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (45567) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (45567) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (45667) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (45667) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (45817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (45817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (45967) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (45967) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46017) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46017) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46167) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46167) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46267) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46267) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46317) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46367) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46367) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46367) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46567) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46567) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46767) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46767) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46917) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46917) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46967) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (46967) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (47067) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (47067) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (47117) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (47117) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (47217) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (47217) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (47267) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (47267) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (47367) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (47367) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (47417) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (47417) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (47517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (47517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (47567) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (47567) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (48267) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (48267) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (48417) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (48417) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (48617) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (48617) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (48767) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (48817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (48917) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (48917) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (49067) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (49067) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (49267) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (49267) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (49367) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (49367) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (49567) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (49567) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (49817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (49817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (50017) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (50017) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (50167) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (50167) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (50417) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (50417) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (50517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (50517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (50717) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (50717) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (50817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (50817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (51517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (51517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (51567) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (51567) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (51717) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (51767) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (51917) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (51917) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (52067) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (52067) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (52217) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (52217) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (52417) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (52417) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (52517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (52517) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (52667) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (52667) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (52817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (52817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (52917) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (52917) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (53067) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (53067) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (53167) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (53167) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (70117) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (70117) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (70667) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (70667) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (71417) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (71417) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (71617) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (71617) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (71817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (71817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (72117) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (72117) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (72667) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (72667) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (72817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (72817) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (73067) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (73067) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (73267) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (73267) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (74867) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (74867) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[1;31mE (324727) vhci_drv: Rx: alloc_acl_from_ll failed[0m
+[0;32mI (324777) ble_mgr: BLE disconnected (reason=531)[0m
+[0;32mI (324777) ble_mgr: UI status notify: disconnected (link lost)[0m
+[0;32mI (2327) BLE_HID: OUTPUT[0]: KEYBOARD ID:  1, Len: 2, Data:[0m
+[0;32mI (2327) BLE_HID: 01 00[0m
+[0;32mI (2327) BLE_HID: Client subscribed, ready to send HID reports[0m
+BLE-HID connected
+BLE-HID disconnected
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.14 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.11 V[0m
+[0;36m[D][wifi:1382]: Found networks:[0m
+[0;32m[I][wifi:1353]: - 'DeepSpace9' [5m(00:45:E2:AF:48:C9) [6m[0;32m▂▄▆█[0m Ch:10 -40dB P:0[0m
+[0;36m[D][wifi:1739]: Retry phase: INITIAL_CONNECT → SCAN_CONNECTING[0m
+[0;32m[I][wifi:1064]: Connecting to [5m'DeepSpace9'[6m [5m(00:45:E2:AF:48:C9)[6m (priority 0, attempt 1/2 in phase SCAN_CONNECTING)...[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.11 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.12 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.12 V[0m
+[0;32m[I][wifi:1475]: Connected[0m
+[0;36m[D][wifi:1492]: Disabling AP[0m
+[0;35m[C][wifi:1202]:   IP Address: 192.168.100.157[0m
+[0;35m[C][wifi:1213]:   SSID: [5m'DeepSpace9'[6m
+  BSSID: [5m00:45:E2:AF:48:C9[6m
+  Hostname: 'unit-fader'
+  Signal strength: -40 dB [0;32m▂▄▆█[0m
+  Channel: 10
+  Subnet: 255.255.255.0
+  Gateway: 192.168.100.1
+  DNS1: 192.168.100.1
+  DNS2: 0.0.0.0[0m
+[0;33m[W][component:462]: wifi cleared Warning flag[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.12 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.12 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.12 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.12 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.12 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.11 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.11 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.12 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.11 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.11 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.12 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.12 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.11 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.11 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.11 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.11 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.11 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.12 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.11 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.11 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.11 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.10 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.10 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.10 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.10 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.10 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.10 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.10 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.10 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.10 V[0m
+[0;32m[I][safe_mode:071]: Boot seems successful; resetting boot loop counter[0m
+[0;36m[D][esp32.preferences:153]: Writing 1 items: 0 cached, 1 written, 0 failed[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.10 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.10 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.10 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.10 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.10 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.10 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.10 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.09 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][wifi:2327]: Roam scan (-50 dBm, attempt 1/3)[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.08 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[1;31m[E][api:129]: No clients; rebooting[0m
+[0;32m[I][app:259]: Forcing a reboot[0m
+ESP-ROM:esp32s3-20210327
+Build:Mar 27 2021
+rst:0xc (RTC_SW_CPU_RST),boot:0x18 (SPI_FAST_FLASH_BOOT)
+Saved PC:0x403796f2
+SPIWP:0xee
+mode:DIO, clock div:1
+load:0x3fce2820,len:0x15c8
+load:0x403c8700,len:0xce4
+load:0x403cb700,len:0x2f8c
+entry 0x403c8918
+[0;32mI (18) boot: ESP-IDF 5.5.2 2nd stage bootloader[0m
+[0;32mI (18) boot: compile time Mar 25 2026 11:25:06[0m
+[0;32mI (18) boot: Multicore bootloader[0m
+[0;32mI (19) boot: chip revision: v0.2[0m
+[0;32mI (19) boot: efuse block revision: v1.3[0m
+[0;32mI (19) boot.esp32s3: Boot SPI Speed : 80MHz[0m
+[0;32mI (19) boot.esp32s3: SPI Mode       : DIO[0m
+[0;32mI (19) boot.esp32s3: SPI Flash Size : 4MB[0m
+[0;32mI (19) boot: Enabling RNG early entropy source...[0m
+[0;32mI (20) boot: Partition Table:[0m
+[0;32mI (20) boot: ## Label            Usage          Type ST Offset   Length[0m
+[0;32mI (20) boot:  0 otadata          OTA data         01 00 00009000 00002000[0m
+[0;32mI (20) boot:  1 phy_init         RF data          01 01 0000b000 00001000[0m
+[0;32mI (21) boot:  2 app0             OTA app          00 10 00010000 001c0000[0m
+[0;32mI (21) boot:  3 app1             OTA app          00 11 001d0000 001c0000[0m
+[0;32mI (22) boot:  4 nvs              WiFi data        01 02 00390000 0006d000[0m
+[0;32mI (22) boot: End of partition table[0m
+[0;32mI (22) esp_image: segment 0: paddr=001d0020 vaddr=3c0b0020 size=258dch (153820) map[0m
+[0;32mI (50) esp_image: segment 1: paddr=001f5904 vaddr=3fc96100 size=04b60h ( 19296) load[0m
+[0;32mI (54) esp_image: segment 2: paddr=001fa46c vaddr=40374000 size=05bach ( 23468) load[0m
+[0;32mI (60) esp_image: segment 3: paddr=00200020 vaddr=42000020 size=a3a74h (670324) map[0m
+[0;32mI (179) esp_image: segment 4: paddr=002a3a9c vaddr=40379bac size=0c544h ( 50500) load[0m
+[0;32mI (190) esp_image: segment 5: paddr=002affe8 vaddr=50000000 size=00020h (    32) load[0m
+[0;32mI (198) boot: Loaded app from partition at offset 0x1d0000[0m
+[0;32mI (198) boot: Disabling RNG early entropy source...[0m
+[0;32m[I][logger:118]: Log initialized[0m
+[0;35m[C][safe_mode:123]: Unsuccessful boot attempts: 0[0m
+[0;36m[D][esp32.preferences:153]: Writing 1 items: 0 cached, 1 written, 0 failed[0m
+[0;32m[I][app:091]: Running through setup()[0m
+[0;36m[D][light:079]: 'Fader LED Strip' Setting:[0m
+[0;36m[D][light:085]:   Color mode: RGB[0m
+[0;36m[D][light:130]:   Transition length: 1.0s[0m
+[0;35m[C][wifi:610]: Starting[0m
+[0;36m[D][wifi:1263]: Starting scan[0m
+[0;35m[C][component:278]: Setup wifi took 74ms[0m
+[0;33m[W][component:422]: api set Warning flag: unspecified[0m
+[0;32m[I][app:138]: setup() finished successfully![0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;33m[W][component:431]: wifi set Warning flag: scanning for networks[0m
+[0;32m[I][app:215]: ESPHome version 2026.2.2 compiled on 2026-03-25 11:41:47 +0800[0m
+[0;32m[I][app:222]: ESP32 Chip: ESP32-S3 rev0.2, 2 core(s)[0m
+[0;35m[C][logger:237]: Logger:
+  Max Level: DEBUG
+  Initial Level: DEBUG[0m
+[0;35m[C][logger:244]:   Log Baud Rate: 115200
+  Hardware UART: USB_SERIAL_JTAG[0m
+[0;35m[C][logger:254]:   Task Log Buffer Size: 768 bytes[0m
+[0;35m[C][esp32_rmt_led_strip:271]: ESP32 RMT LED Strip:
+  Pin: 2[0m
+[0;35m[C][esp32_rmt_led_strip:275]:   RMT Symbols: 192[0m
+[0;35m[C][esp32_rmt_led_strip:300]:   RGB Order: GRB
+  Max refresh rate: 0
+  Number of LEDs: 14[0m
+[0;35m[C][light:091]: Light 'Fader LED Strip'[0m
+[0;35m[C][light:094]:   Default Transition Length: 1.0s
+  Gamma Correct: 2.80[0m
+[0;35m[C][adc.esp32:017]: ADC Sensor 'Fader ADC'
+  State Class: 'measurement'
+  Unit of Measurement: 'V'
+  Accuracy Decimals: 2[0m
+[0;35m[C][adc.esp32:163]:   Device Class: 'voltage'[0m
+[0;35m[C][adc.esp32:152]:   Pin: GPIO1[0m
+[0;35m[C][adc.esp32:124]:   Channel:       0
+  Unit:          ADC1
+  Attenuation:   12 dB
+  Samples:       1
+  Sampling mode: average
+  Setup Status:
+    Handle Init:  OK
+    Config:       OK
+    Calibration:  OK
+    Overall Init: OK[0m
+[0;35m[C][adc.esp32:488]:   Update Interval: 0.1s[0m
+[0;35m[C][captive_portal:134]: Captive Portal:[0m
+[0;35m[C][wifi:1450]: WiFi:
+  Local MAC: E4:B3:23:F6:F1:D0
+  Connected: NO[0m
+[0;35m[C][esphome.ota:075]: Over-The-Air updates:
+  Address: unit-fader.local:3232
+  Version: 2[0m
+[0;35m[C][esphome.ota:082]:   Password configured[0m
+[0;35m[C][safe_mode:022]: Safe Mode:
+  Successful after: 60s
+  Invoke after: 10 attempts
+  Duration: 300s[0m
+[0;35m[C][safe_mode:039]:   Bootloader rollback: support unknown[0m
+[0;35m[C][web_server.ota:238]: Web Server OTA[0m
+[0;35m[C][api:237]: Server:
+  Address: unit-fader.local:6053
+  Listen backlog: 4
+  Max connections: 8[0m
+[0;35m[C][api:244]:   Noise encryption: YES[0m
+[0;35m[C][mdns:177]: mDNS:
+  Hostname: unit-fader[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.04 V[0m
+[0;36m[D][wifi:1382]: Found networks:[0m
+[0;32m[I][wifi:1353]: - 'DeepSpace9' [5m(00:45:E2:AF:48:C9) [6m[0;32m▂▄▆█[0m Ch:10 -35dB P:0[0m
+[0;36m[D][wifi:1739]: Retry phase: INITIAL_CONNECT → SCAN_CONNECTING[0m
+[0;32m[I][wifi:1064]: Connecting to [5m'DeepSpace9'[6m [5m(00:45:E2:AF:48:C9)[6m (priority 0, attempt 1/2 in phase SCAN_CONNECTING)...[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.04 V[0m
+[0;32m[I][wifi:1475]: Connected[0m
+[0;36m[D][wifi:1492]: Disabling AP[0m
+[0;35m[C][wifi:1202]:   IP Address: 192.168.100.157[0m
+[0;35m[C][wifi:1213]:   SSID: [5m'DeepSpace9'[6m
+  BSSID: [5m00:45:E2:AF:48:C9[6m
+  Hostname: 'unit-fader'
+  Signal strength: -37 dB [0;32m▂▄▆█[0m
+  Channel: 10
+  Subnet: 255.255.255.0
+  Gateway: 192.168.100.1
+  DNS1: 192.168.100.1
+  DNS2: 0.0.0.0[0m
+[0;33m[W][component:462]: wifi cleared Warning flag[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;32m[I][safe_mode:071]: Boot seems successful; resetting boot loop counter[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][esp32.preferences:153]: Writing 1 items: 0 cached, 1 written, 0 failed[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.04 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.04 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.05 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.07 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;36m[D][sensor:118]: 'Fader ADC' >> 0.06 V[0m
+[0;32mI (354) esp_image: segment 4: paddr=00185468 vaddr=4ff0a720 size=0dc30h ( 56368) load[0m
+[0;32mI (367) esp_image: segment 5: paddr=001930a0 vaddr=4ff18380 size=03738h ( 14136) load[0m
+[0;32mI (372) esp_image: segment 6: paddr=001967e0 vaddr=50108080 size=00020h (    32) load[0m
+[0;32mI (379) boot: Loaded app from partition at offset 0x10000[0m
+[0;32mI (379) boot: Disabling RNG early entropy source...[0m
+[0;32mI (395) hex_psram: vendor id    : 0x0d (AP)[0m
+[0;32mI (395) hex_psram: Latency      : 0x01 (Fixed)[0m
+[0;32mI (395) hex_psram: DriveStr.    : 0x00 (25 Ohm)[0m
+[0;32mI (396) hex_psram: dev id       : 0x03 (generation 4)[0m
+[0;32mI (401) hex_psram: density      : 0x07 (256 Mbit)[0m
+[0;32mI (405) hex_psram: good-die     : 0x06 (Pass)[0m
+[0;32mI (409) hex_psram: SRF          : 0x02 (Slow Refresh)[0m
+[0;32mI (414) hex_psram: BurstType    : 0x00 ( Wrap)[0m
+[0;32mI (418) hex_psram: BurstLen     : 0x03 (2048 Byte)[0m
+[0;32mI (423) hex_psram: BitMode      : 0x01 (X16 Mode)[0m
+[0;32mI (427) hex_psram: Readlatency  : 0x04 (14 cycles@Fixed)[0m
+[0;32mI (432) hex_psram: DriveStrength: 0x00 (1/1)[0m
+[0;32mI (436) MSPI DQS: tuning success, best phase id is 0[0m
+[0;32mI (613) MSPI DQS: tuning success, best delayline id is 16[0m
+[0;32mI (614) esp_psram: Found 32MB PSRAM device[0m
+[0;32mI (614) esp_psram: Speed: 200MHz[0m
+[0;32mI (615) hex_psram: psram CS IO is dedicated[0m
+[0;32mI (618) cpu_start: Multicore app[0m
+[0;32mI (1571) esp_psram: SPI SRAM memory test OK[0m
+[0;32mI (1580) cpu_start: Pro cpu start user code[0m
+[0;32mI (1580) cpu_start: cpu freq: 360000000 Hz[0m
+[0;32mI (1581) app_init: Application information:[0m
+[0;32mI (1581) app_init: Project name:     TerminalDemo[0m
+[0;32mI (1585) app_init: App version:      1[0m
+[0;32mI (1588) app_init: Compile time:     Mar 30 2026 18:25:04[0m
+[0;32mI (1594) app_init: ELF file SHA256:  1cc5c54dd...[0m
+[0;32mI (1598) app_init: ESP-IDF:          v5.5.1-dirty[0m
+[0;32mI (1602) efuse_init: Min chip rev:     v0.1[0m
+[0;32mI (1606) efuse_init: Max chip rev:     v1.99 [0m
+[0;32mI (1610) efuse_init: Chip rev:         v1.0[0m
+[0;32mI (1614) heap_init: Initializing. RAM available for dynamic allocation:[0m
+[0;32mI (1621) heap_init: At 4FF207D0 len 0001A7F0 (105 KiB): RAM[0m
+[0;32mI (1626) heap_init: At 4FF3AFC0 len 00004BF0 (18 KiB): RAM[0m
+[0;32mI (1631) heap_init: At 4FF40000 len 00060000 (384 KiB): RAM[0m
+[0;32mI (1637) heap_init: At 501080A0 len 00007F60 (31 KiB): RTCRAM[0m
+[0;32mI (1642) heap_init: At 30100068 len 00001F98 (7 KiB): TCM[0m
+[0;32mI (1647) esp_psram: Adding pool of 32768K of PSRAM memory to heap allocator[0m
+[0;32mI (1655) spi_flash: detected chip: generic[0m
+[0;32mI (1658) spi_flash: flash io: dio[0m
+[0;32mI (1661) host_init: ESP Hosted : Host chip_ip[18][0m
+[0;32mI (1665) H_API: ESP-Hosted starting. Hosted_Tasks: prio:23, stack: 5120 RPC_task_stack: 5120
