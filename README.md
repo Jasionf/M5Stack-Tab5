@@ -1,6 +1,6 @@
 # 🎮 M5Stack Tab5 Fun Dev Kit
 <p align="center">
-  <img src="https://m5stack.oss-cn-shenzhen.aliyuncs.com/image/m5-docs/core/stack_tab5_01.webp" width="400" alt="M5Stack Tab5"/>
+  <img src="C145_04.webp" width="400" alt="M5Stack Tab5"/>
 </p>
 
 > ✨ A collection of fun applications for the M5Stack Tab5 high-performance touch dev board powered by ESP32-P4 - turn your Tab5 into a multi-functional entertainment device in minutes!
