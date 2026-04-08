@@ -21,31 +21,27 @@
 
 ## 🎬 Preview
 
-<div align="center">
-
-<img src="readme/terminal.gif" width="720"/>
-
 </div>
 
 <br/>
 
 <table>
   <tr>
-    <td align="center" width="48%">
+    <td align="center" width="49%">
       <img src="readme/ui3.jpg"/><br/>
       <sub>🏠 Home — select connection method</sub>
     </td>
-    <td align="center" width="52%">
+    <td align="center" width="51%">
       <img src="readme/ui4.jpg"/><br/>
       <sub>🏠 Home — UART card selected</sub>
     </td>
   </tr>
   <tr>
-    <td align="center" width="48%">
+    <td align="center" width="49%">
       <img src="readme/ui1.jpg"/><br/>
       <sub>🔍 Scan — discovering nearby BLE devices</sub>
     </td>
-    <td align="center" width="52%">
+    <td align="center" width="51%">
       <img src="readme/ui2.jpg"/><br/>
       <sub>💻 Terminal — neofetch system info</sub>
     </td>
