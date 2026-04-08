@@ -1,7 +1,3 @@
-<div align="center">
-
-<img src="https://m5stack-doc.oss-cn-shenzhen.aliyuncs.com/1132/C145_01.webp" width="480"/>
-
 # Tab5 Terminal Demo
 
 **A hacker-style terminal UI for the M5Stack Tab5**
@@ -35,26 +31,30 @@
 
 <table>
   <tr>
-    <td align="center" width="50%">
+    <td align="center" width="48%">
       <img src="readme/ui3.jpg"/><br/>
       <sub>🏠 Home — select connection method</sub>
     </td>
-    <td align="center" width="50%">
+    <td align="center" width="52%">
       <img src="readme/ui4.jpg"/><br/>
       <sub>🏠 Home — UART card selected</sub>
     </td>
   </tr>
   <tr>
-    <td align="center" width="50%">
+    <td align="center" width="48%">
       <img src="readme/ui1.jpg"/><br/>
       <sub>🔍 Scan — discovering nearby BLE devices</sub>
     </td>
-    <td align="center" width="50%">
+    <td align="center" width="52%">
       <img src="readme/ui2.jpg"/><br/>
       <sub>💻 Terminal — neofetch system info</sub>
     </td>
   </tr>
 </table>
+
+<div align="center">
+<img src="readme/terminal.gif" width="480"/>
+</div>
 
 ---
 
