@@ -13,8 +13,6 @@
 
 <br/>
 
-> 📺 **Watch the demo →** [bilibili.com/video/BV1Gc9NBiEnC](https://www.bilibili.com/video/BV1Gc9NBiEnC/?spm_id_from=333.337.search-card.all.click&vd_source=8dac32984926ea536404e89c4dd4f963)
-
 </div>
 
 ---
@@ -321,11 +319,4 @@ CC0-1.0 — public domain. Do whatever you like.
 
 ---
 
-<div align="center">
-
-Built with ☕ on an ESP32-P4.
-
-**[▶ Watch the full demo on Bilibili](https://www.bilibili.com/video/BV1Gc9NBiEnC/?spm_id_from=333.337.search-card.all.click&vd_source=8dac32984926ea536404e89c4dd4f963)**
-
-</div>
 
