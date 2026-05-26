@@ -1,15 +1,19 @@
+# Locate SSH keys: prefer ~/.esp_keys/, fall back to the existing SSHKEYBOARD project keys.
+if(EXISTS "$ENV{HOME}/.esp_keys/id_ed25519")
+    set(SSH_KEY_DIR "$ENV{HOME}/.esp_keys")
+elseif(EXISTS "/Users/m5-vincent/Documents/SSHKEYBOARD/esp32-terminal/keys/id_ed25519")
+    set(SSH_KEY_DIR "/Users/m5-vincent/Documents/SSHKEYBOARD/esp32-terminal/keys")
+else()
+    message(FATAL_ERROR "SSH key pair not found. Expected ~/.esp_keys/id_ed25519 or /Users/m5-vincent/Documents/SSHKEYBOARD/esp32-terminal/keys/id_ed25519")
+endif()
+
 idf_component_register(
     SRCS
         "main.c"
-        "wireless/wireless_mgr.c"
-        "wireless/espnow_mgr.c"
-        "wireless/ble_mgr.c"
-        "wireless/uart_mgr.c"
-        "ui/ui_home.c"
-        "ui/ui_scan.c"
-        "ui/ui_connect.c"
-        "ui/ui_connected.c"
+        "keyboard/keyboard_mgr.c"
         "ui/ui_terminal.c"
+        "ui/ui_nokia.c"
+        "ui/ui_gamepage.cpp"
 
         "assets/images/choose_gif.c"
         "assets/images/logo_espnow.c"
@@ -33,12 +37,21 @@ idf_component_register(
         "assets/fonts/font_inter_regular_24.c"
         "assets/fonts/font_inter_regular_20.c"
         "assets/fonts/font_inter_regular_32.c"
-    INCLUDE_DIRS "." "wireless" "ui"
+    INCLUDE_DIRS "." "keyboard" "wireless" "ui"
     PRIV_REQUIRES
         bt
         nvs_flash
         esp_wifi
         esp_event
+        esp_driver_i2c
+        esp_netif
+        esp32-wolfssh-client
+        libvterm
+        Jet
+    EMBED_TXTFILES "${SSH_KEY_DIR}/id_ed25519"
+                   "${SSH_KEY_DIR}/id_ed25519.pub"
 )
 
 target_compile_definitions(${COMPONENT_LIB} PRIVATE LV_LVGL_H_INCLUDE_SIMPLE=1)
+
+set_source_files_properties("ui/ui_gamepage.cpp" PROPERTIES COMPILE_OPTIONS -O3)

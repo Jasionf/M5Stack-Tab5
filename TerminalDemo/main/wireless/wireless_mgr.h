@@ -30,7 +30,7 @@ typedef void (*wireless_recv_cb_t)(bool is_bt,
                                    size_t len);
 
 esp_err_t wireless_init(void);
-i
+
 int  wireless_get_results(wireless_node_t *out, int max_count);
 
 int  wireless_node_count(void);

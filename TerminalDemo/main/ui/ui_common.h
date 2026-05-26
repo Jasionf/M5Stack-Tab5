@@ -94,6 +94,10 @@ typedef struct {
     lv_obj_t       *scr;    
 } connect_btn_ctx_t;
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 extern int        g_selected;           
 extern lv_obj_t  *g_cards[2];           
 extern lv_obj_t  *g_p2_overlay;         
@@ -108,3 +112,8 @@ void connect_click_cb(lv_event_t *e);
 
 void build_page4(bool is_bt);               
 void build_page5(bool is_bt);               
+void build_gamepage(void);
+
+#ifdef __cplusplus
+}
+#endif

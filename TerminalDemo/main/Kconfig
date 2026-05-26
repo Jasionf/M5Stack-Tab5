@@ -1,0 +1,23 @@
+menu "Tab5 SSH Terminal"
+
+config WIFI_SSID
+    string "WiFi SSID"
+    default "M5Stack"
+
+config WIFI_PASS
+    string "WiFi password"
+    default "m5office888"
+
+config DEFAULT_SSH_HOST
+    string "Default SSH host"
+    default "192.168.51.54"
+
+config DEFAULT_SSH_USER
+    string "Default SSH user"
+    default "m5-vincent"
+
+config DEFAULT_SSH_PORT
+    int "Default SSH port"
+    default 22
+
+endmenu

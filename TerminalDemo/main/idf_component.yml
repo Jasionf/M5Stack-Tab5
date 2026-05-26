@@ -17,4 +17,10 @@ dependencies:
     rules:
     - if: target in [esp32p4]
   espressif/esp_io_expander_pi4ioe5v6408: ^1.0.1
+  esp32-wolfssh-client:
+    path: ../../../../../../SSHKEYBOARD/esp32-wolfssh-client
+  wolfssl:
+    path: ../../../esp32-terminal/components/wolfssl
+  libvterm:
+    path: ../../../esp32-terminal/components/libvterm
 description: BSP Display example — ESP-NOW + BLE scan demo

@@ -1,12 +1,23 @@
 #include "ui_common.h"
-#include "wireless_mgr.h"
-#include "uart_mgr.h"
+#include "keyboard_mgr.h"
 #include "esp_log.h"
 #include "esp_timer.h"
 #include "esp_random.h"
 #include "esp_heap_caps.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
+#include "freertos/event_groups.h"
+
+#include "bsp/esp-bsp.h"
+#include "esp_event.h"
+#include "esp_netif.h"
+#include "esp_wifi.h"
+#include "nvs_flash.h"
+#include "sdkconfig.h"
+
+#include "esp_wolfssh_client.h"
+#include "vterm.h"
+#include "wolfssh/ssh.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -18,6 +29,26 @@
 #define TERM_LINE_LEN        256
 #define TERM_MAX_INPUT       220
 #define TERM_HISTORY_MAX     20
+#define TERM_VT_ROWS         24
+#define TERM_VT_COLS         112
+#define TERM_CONNECT_STACK   8192
+#define TERM_WIFI_TIMEOUT_MS 30000
+
+#ifndef CONFIG_WIFI_SSID
+#define CONFIG_WIFI_SSID "M5Stack"
+#endif
+#ifndef CONFIG_WIFI_PASS
+#define CONFIG_WIFI_PASS "m5office888"
+#endif
+#ifndef CONFIG_DEFAULT_SSH_HOST
+#define CONFIG_DEFAULT_SSH_HOST "192.168.51.54"
+#endif
+#ifndef CONFIG_DEFAULT_SSH_USER
+#define CONFIG_DEFAULT_SSH_USER "m5-vincent"
+#endif
+#ifndef CONFIG_DEFAULT_SSH_PORT
+#define CONFIG_DEFAULT_SSH_PORT 22
+#endif
 
 #define TOPBAR_H             64
 #define INPUT_H              68
@@ -30,14 +61,7 @@
 static const char *s_cmd_catalog[] = {
     "help", "clear", "neofetch", "uname -a", "uptime", "date", "pwd", "whoami",
     "ls", "ls -la", "cat /etc/motd", "ifconfig", "ping", "ping 8.8.8.8",
-    "ble status", "espnow scan", "top", "ps", "fortune", "sudo", "sudo rm -rf /", "reboot"
-};
-
-static const uint8_t s_keymap_normal[4][11] = {
-    {0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x30, 0x00},
-    {0x71, 0x77, 0x65, 0x72, 0x74, 0x79, 0x75, 0x69, 0x6F, 0x70, 0x08},
-    {0x41, 0x61, 0x73, 0x64, 0x66, 0x67, 0x68, 0x6A, 0x6B, 0x6C, 0x0A},
-    {0x46, 0x53, 0x7A, 0x78, 0x63, 0x76, 0x62, 0x6E, 0x6D, 0x20, 0x00}
+    "keyboard status", "gamepage", "top", "ps", "fortune", "sudo", "sudo rm -rf /", "reboot"
 };
 
 typedef struct {
@@ -48,8 +72,11 @@ typedef struct {
     lv_obj_t *input_prompt;
     lv_obj_t *input_label;
     lv_obj_t *cursor;
-    lv_obj_t *ble_dot;
-    lv_obj_t *ble_label;
+    lv_obj_t *kb_dot;
+    lv_obj_t *kb_label;
+    lv_obj_t *ssh_dot;
+    lv_obj_t *ssh_label;
+    lv_obj_t *vt_labels[TERM_VT_ROWS];
     lv_obj_t *line_rows[TERM_MAX_LINES];
     uint16_t  line_count;
     uint16_t  row_count;
@@ -63,12 +90,25 @@ typedef struct {
     bool is_disconnected;
 } status_async_arg_t;
 
+typedef enum {
+    TERM_SSH_IDLE = 0,
+    TERM_SSH_WIFI,
+    TERM_SSH_CONNECTING,
+    TERM_SSH_CONNECTED,
+    TERM_SSH_FAILED,
+} term_ssh_state_t;
+
+typedef struct {
+    term_ssh_state_t state;
+    int reason;
+} ssh_status_async_arg_t;
+
 typedef struct {
     int seq;
 } ping_ctx_t;
 
 static ui_terminal_t s_term;
-static bool          s_is_bt = false;
+static bool          s_keyboard_connected = false;
 static char          s_input_buf[TERM_MAX_INPUT + 1];
 static int           s_input_len = 0;
 static char          s_cmd_history[TERM_HISTORY_MAX][TERM_MAX_INPUT + 1];
@@ -77,25 +117,29 @@ static int           s_cmd_hist_index = -1;
 static lv_timer_t   *s_ping_timer = NULL;
 static uint8_t       s_esc_state = 0;
 
-static bool espnow_key_to_ascii(uint8_t key_id, uint8_t state, uint8_t *out_ch)
-{
-    if (!out_ch || state != 0x01 || key_id >= 44) {
-        return false;
-    }
+static const char *TAG = "ui_terminal";
 
-    int row = key_id / 11;
-    int col = key_id % 11;
-    if (row < 0 || row >= 4 || col < 0 || col >= 11) {
-        return false;
-    }
+extern const uint8_t ssh_key_start[]    asm("_binary_id_ed25519_start");
+extern const uint8_t ssh_key_end[]      asm("_binary_id_ed25519_end");
+extern const uint8_t ssh_pubkey_start[] asm("_binary_id_ed25519_pub_start");
+extern const uint8_t ssh_pubkey_end[]   asm("_binary_id_ed25519_pub_end");
 
-    uint8_t ch = s_keymap_normal[row][col];
-    if (ch == 0) {
-        return false;
-    }
-    *out_ch = ch;
-    return true;
-}
+static VTerm             *s_vt = NULL;
+static VTermScreen       *s_vt_screen = NULL;
+static SemaphoreHandle_t  s_vterm_lock = NULL;
+static uint64_t           s_vt_dirty_rows = 0;
+static lv_timer_t        *s_vterm_timer = NULL;
+static bool               s_remote_mode = false;
+
+static EventGroupHandle_t s_wifi_events = NULL;
+static TaskHandle_t       s_connect_task = NULL;
+static bool               s_wifi_initialized = false;
+static bool               s_wifi_handlers_registered = false;
+static bool               s_wolfssh_initialized = false;
+static volatile bool      s_ssh_connected = false;
+static volatile bool      s_ssh_connecting = false;
+
+#define TERM_WIFI_CONNECTED_BIT BIT0
 
 static void cursor_opa_cb(void *obj, int32_t v)
 {
@@ -223,14 +267,582 @@ static void term_update_input_label(void)
     lv_label_set_text(s_term.input_label, s_input_buf);
 }
 
-static void term_set_ble_status(bool connected)
+static void term_set_keyboard_status(bool connected)
 {
-    if (s_term.ble_dot && lv_obj_is_valid(s_term.ble_dot)) {
-        lv_obj_set_style_bg_color(s_term.ble_dot, connected ? T_SUCCESS : T_ERROR, 0);
+    if (s_term.kb_dot && lv_obj_is_valid(s_term.kb_dot)) {
+        lv_obj_set_style_bg_color(s_term.kb_dot, connected ? T_SUCCESS : T_ERROR, 0);
     }
-    if (s_term.ble_label && lv_obj_is_valid(s_term.ble_label)) {
-        lv_label_set_text(s_term.ble_label, connected ? "CONNECTED" : "DISCONNECTED");
-        lv_obj_set_style_text_color(s_term.ble_label, connected ? T_SUCCESS : T_ERROR, 0);
+    if (s_term.kb_label && lv_obj_is_valid(s_term.kb_label)) {
+        lv_label_set_text(s_term.kb_label, connected ? "UNIT KB READY" : "NO KEYBOARD");
+        lv_obj_set_style_text_color(s_term.kb_label, connected ? T_SUCCESS : T_ERROR, 0);
+    }
+}
+
+
+static void term_set_ssh_status(term_ssh_state_t state)
+{
+    const char *txt = "SSH IDLE";
+    lv_color_t color = T_DIM;
+
+    switch (state) {
+    case TERM_SSH_WIFI:
+        txt = "WIFI...";
+        color = T_WARN;
+        break;
+    case TERM_SSH_CONNECTING:
+        txt = "SSH...";
+        color = T_WARN;
+        break;
+    case TERM_SSH_CONNECTED:
+        txt = "SSH LIVE";
+        color = T_SUCCESS;
+        break;
+    case TERM_SSH_FAILED:
+        txt = "SSH FAIL";
+        color = T_ERROR;
+        break;
+    case TERM_SSH_IDLE:
+    default:
+        break;
+    }
+
+    if (s_term.ssh_dot && lv_obj_is_valid(s_term.ssh_dot)) {
+        lv_obj_set_style_bg_color(s_term.ssh_dot, color, 0);
+    }
+    if (s_term.ssh_label && lv_obj_is_valid(s_term.ssh_label)) {
+        lv_label_set_text(s_term.ssh_label, txt);
+        lv_obj_set_style_text_color(s_term.ssh_label, color, 0);
+    }
+}
+
+static void term_set_input_hint(const char *prompt, const char *hint, lv_color_t color)
+{
+    if (s_term.input_prompt && lv_obj_is_valid(s_term.input_prompt)) {
+        lv_label_set_text(s_term.input_prompt, prompt ? prompt : "SSH");
+    }
+    if (s_term.input_label && lv_obj_is_valid(s_term.input_label)) {
+        lv_label_set_text(s_term.input_label, hint ? hint : "");
+        lv_obj_set_style_text_color(s_term.input_label, color, 0);
+    }
+}
+
+static int terminal_vt_on_damage(VTermRect rect, void *user)
+{
+    (void)user;
+    for (int r = rect.start_row; r < rect.end_row && r < TERM_VT_ROWS && r < 64; r++) {
+        if (r >= 0) {
+            s_vt_dirty_rows |= (1ULL << r);
+        }
+    }
+    return 0;
+}
+
+static int terminal_vt_on_movecursor(VTermPos pos, VTermPos oldpos, int visible, void *user)
+{
+    (void)visible;
+    (void)user;
+    if (oldpos.row >= 0 && oldpos.row < TERM_VT_ROWS && oldpos.row < 64) {
+        s_vt_dirty_rows |= (1ULL << oldpos.row);
+    }
+    if (pos.row >= 0 && pos.row < TERM_VT_ROWS && pos.row < 64) {
+        s_vt_dirty_rows |= (1ULL << pos.row);
+    }
+    return 0;
+}
+
+static const VTermScreenCallbacks s_vterm_cbs = {
+    .damage = terminal_vt_on_damage,
+    .movecursor = terminal_vt_on_movecursor,
+};
+
+static void terminal_vterm_destroy(void)
+{
+    if (s_vterm_timer) {
+        lv_timer_del(s_vterm_timer);
+        s_vterm_timer = NULL;
+    }
+    if (s_vt) {
+        vterm_free(s_vt);
+        s_vt = NULL;
+        s_vt_screen = NULL;
+    }
+    s_vt_dirty_rows = 0;
+}
+
+static esp_err_t terminal_vterm_init(void)
+{
+    if (!s_vterm_lock) {
+        s_vterm_lock = xSemaphoreCreateMutex();
+        if (!s_vterm_lock) {
+            return ESP_ERR_NO_MEM;
+        }
+    }
+
+    terminal_vterm_destroy();
+    s_vt = vterm_new(TERM_VT_ROWS, TERM_VT_COLS);
+    if (!s_vt) {
+        return ESP_ERR_NO_MEM;
+    }
+
+    vterm_set_utf8(s_vt, 1);
+    s_vt_screen = vterm_obtain_screen(s_vt);
+    vterm_screen_set_callbacks(s_vt_screen, &s_vterm_cbs, NULL);
+    vterm_screen_reset(s_vt_screen, 1);
+    s_vt_dirty_rows = (TERM_VT_ROWS >= 64) ? UINT64_MAX : ((1ULL << TERM_VT_ROWS) - 1ULL);
+    return ESP_OK;
+}
+
+static void terminal_vterm_write(const char *text)
+{
+    if (!text || !s_vt || !s_vterm_lock) {
+        return;
+    }
+    if (xSemaphoreTake(s_vterm_lock, pdMS_TO_TICKS(100)) == pdTRUE) {
+        vterm_input_write(s_vt, text, (int)strlen(text));
+        xSemaphoreGive(s_vterm_lock);
+    }
+}
+
+static void terminal_vterm_write_line(const char *line)
+{
+    char buf[192];
+    snprintf(buf, sizeof(buf), "%s\r\n", line ? line : "");
+    terminal_vterm_write(buf);
+}
+
+static void terminal_vterm_writef(const char *fmt, ...)
+{
+    char line[192];
+    va_list args;
+    va_start(args, fmt);
+    vsnprintf(line, sizeof(line), fmt, args);
+    va_end(args);
+    terminal_vterm_write_line(line);
+}
+
+static void terminal_vterm_create_rows(void)
+{
+    if (s_term.output_area && lv_obj_is_valid(s_term.output_area)) {
+        lv_obj_set_style_pad_row(s_term.output_area, 2, 0);
+    }
+    memset(s_term.vt_labels, 0, sizeof(s_term.vt_labels));
+    for (int r = 0; r < TERM_VT_ROWS; r++) {
+        lv_obj_t *row = term_make_row();
+        term_line_prefix(row);
+
+        lv_obj_t *lbl = lv_label_create(row);
+        s_term.vt_labels[r] = lbl;
+        lv_label_set_text(lbl, "");
+        lv_label_set_long_mode(lbl, LV_LABEL_LONG_CLIP);
+        lv_obj_set_width(lbl, SCREEN_W - OUTPUT_SIDE_PAD * 2 - LINE_NO_W - CONTENT_LEFT_PAD);
+        lv_obj_set_height(lbl, 20);
+        lv_obj_set_style_text_color(lbl, T_DEFAULT, 0);
+        lv_obj_set_style_text_font(lbl, &lv_font_inter_regular_20, 0);
+        lv_obj_set_style_text_letter_space(lbl, 0, 0);
+    }
+}
+
+static void terminal_vterm_render_timer(lv_timer_t *timer)
+{
+    (void)timer;
+    if (!s_vt || !s_vt_screen || !s_vterm_lock) {
+        return;
+    }
+    if (xSemaphoreTake(s_vterm_lock, pdMS_TO_TICKS(2)) != pdTRUE) {
+        return;
+    }
+
+    VTermState *state = vterm_obtain_state(s_vt);
+    VTermPos cursor = { .row = -1, .col = -1 };
+    vterm_state_get_cursorpos(state, &cursor);
+
+    uint64_t dirty = s_vt_dirty_rows;
+    if (cursor.row >= 0 && cursor.row < TERM_VT_ROWS && cursor.row < 64) {
+        dirty |= (1ULL << cursor.row);
+    }
+    s_vt_dirty_rows = 0;
+
+    for (int row = 0; row < TERM_VT_ROWS; row++) {
+        if (!(dirty & (1ULL << row))) {
+            continue;
+        }
+        if (!s_term.vt_labels[row] || !lv_obj_is_valid(s_term.vt_labels[row])) {
+            continue;
+        }
+
+        char line[TERM_VT_COLS + 1];
+        for (int col = 0; col < TERM_VT_COLS; col++) {
+            VTermScreenCell cell;
+            VTermPos pos = { .row = row, .col = col };
+            vterm_screen_get_cell(s_vt_screen, pos, &cell);
+            uint32_t cp = cell.chars[0];
+            line[col] = (cp >= 32 && cp < 127) ? (char)cp : ' ';
+        }
+
+        int last = TERM_VT_COLS - 1;
+        while (last > 0 && line[last] == ' ') {
+            last--;
+        }
+
+        if (cursor.row == row) {
+            int ccol = cursor.col;
+            if (ccol < 0) {
+                ccol = 0;
+            } else if (ccol >= TERM_VT_COLS) {
+                ccol = TERM_VT_COLS - 1;
+            }
+            while (last < ccol) {
+                line[++last] = ' ';
+            }
+            line[ccol] = (line[ccol] == ' ') ? '_' : line[ccol];
+        }
+
+        line[last + 1] = '\0';
+        lv_label_set_text(s_term.vt_labels[row], line);
+    }
+
+    xSemaphoreGive(s_vterm_lock);
+}
+
+static void terminal_vterm_banner(void)
+{
+    terminal_vterm_write_line("Tab5 Terminal UI");
+    terminal_vterm_writef("WiFi: %s", CONFIG_WIFI_SSID);
+    terminal_vterm_writef("SSH : %s@%s:%d", CONFIG_DEFAULT_SSH_USER,
+                          CONFIG_DEFAULT_SSH_HOST, CONFIG_DEFAULT_SSH_PORT);
+    terminal_vterm_write_line("Press Enter to reconnect if the session drops.");
+    terminal_vterm_write_line("");
+}
+
+static void terminal_ssh_status_async_cb(void *arg)
+{
+    ssh_status_async_arg_t *a = (ssh_status_async_arg_t *)arg;
+    if (!a) {
+        return;
+    }
+
+    term_set_ssh_status(a->state);
+    switch (a->state) {
+    case TERM_SSH_WIFI:
+        term_set_input_hint("WiFi", "connecting...", T_WARN);
+        break;
+    case TERM_SSH_CONNECTING:
+        term_set_input_hint("SSH", "handshake...", T_WARN);
+        break;
+    case TERM_SSH_CONNECTED:
+        term_set_input_hint("SSH LIVE", "remote echo enabled", T_SUCCESS);
+        break;
+    case TERM_SSH_FAILED:
+        term_set_input_hint("SSH", "press Enter to reconnect", T_ERROR);
+        break;
+    case TERM_SSH_IDLE:
+    default:
+        term_set_input_hint("SSH", "press Enter to connect", T_DIM);
+        break;
+    }
+    free(a);
+}
+
+static void terminal_post_ssh_status(term_ssh_state_t state, int reason)
+{
+    ssh_status_async_arg_t *a = malloc(sizeof(ssh_status_async_arg_t));
+    if (!a) {
+        return;
+    }
+    a->state = state;
+    a->reason = reason;
+    lv_async_call(terminal_ssh_status_async_cb, a);
+}
+
+static void terminal_wifi_event_handler(void *arg, esp_event_base_t base,
+                                        int32_t id, void *data)
+{
+    (void)arg;
+    (void)data;
+
+    if (base == WIFI_EVENT && id == WIFI_EVENT_STA_DISCONNECTED) {
+        if (s_wifi_events) {
+            xEventGroupClearBits(s_wifi_events, TERM_WIFI_CONNECTED_BIT);
+        }
+        if (s_ssh_connected || s_ssh_connecting) {
+            esp_wifi_connect();
+        }
+    } else if (base == IP_EVENT && id == IP_EVENT_STA_GOT_IP) {
+        if (s_wifi_events) {
+            xEventGroupSetBits(s_wifi_events, TERM_WIFI_CONNECTED_BIT);
+        }
+    }
+}
+
+static esp_err_t terminal_wifi_start(void)
+{
+    if (!s_wifi_events) {
+        s_wifi_events = xEventGroupCreate();
+        if (!s_wifi_events) {
+            return ESP_ERR_NO_MEM;
+        }
+    }
+    xEventGroupClearBits(s_wifi_events, TERM_WIFI_CONNECTED_BIT);
+
+    if (!s_wifi_initialized) {
+        esp_err_t ret = nvs_flash_init();
+        if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+            ESP_LOGW(TAG, "NVS needs erase: %s", esp_err_to_name(ret));
+            ESP_ERROR_CHECK(nvs_flash_erase());
+            ret = nvs_flash_init();
+        }
+        if (ret != ESP_OK) {
+            return ret;
+        }
+
+        ret = bsp_feature_enable(BSP_FEATURE_WIFI, true);
+        if (ret != ESP_OK) {
+            ESP_LOGW(TAG, "bsp_feature_enable(WIFI) failed: %s", esp_err_to_name(ret));
+        }
+        vTaskDelay(pdMS_TO_TICKS(150));
+
+        ret = esp_netif_init();
+        if (ret != ESP_OK && ret != ESP_ERR_INVALID_STATE) {
+            return ret;
+        }
+        ret = esp_event_loop_create_default();
+        if (ret != ESP_OK && ret != ESP_ERR_INVALID_STATE) {
+            return ret;
+        }
+
+        (void)esp_netif_create_default_wifi_sta();
+
+        wifi_init_config_t cfg = WIFI_INIT_CONFIG_DEFAULT();
+        ret = esp_wifi_init(&cfg);
+        if (ret != ESP_OK) {
+            return ret;
+        }
+
+        if (!s_wifi_handlers_registered) {
+            ret = esp_event_handler_register(WIFI_EVENT, ESP_EVENT_ANY_ID,
+                                             terminal_wifi_event_handler, NULL);
+            if (ret != ESP_OK) {
+                return ret;
+            }
+            ret = esp_event_handler_register(IP_EVENT, IP_EVENT_STA_GOT_IP,
+                                             terminal_wifi_event_handler, NULL);
+            if (ret != ESP_OK) {
+                return ret;
+            }
+            s_wifi_handlers_registered = true;
+        }
+
+        ret = esp_wifi_set_storage(WIFI_STORAGE_RAM);
+        if (ret != ESP_OK) {
+            return ret;
+        }
+        ret = esp_wifi_set_mode(WIFI_MODE_STA);
+        if (ret != ESP_OK) {
+            return ret;
+        }
+        ret = esp_wifi_start();
+        if (ret != ESP_OK) {
+            return ret;
+        }
+        s_wifi_initialized = true;
+    }
+
+    wifi_config_t wifi_cfg = {0};
+    snprintf((char *)wifi_cfg.sta.ssid, sizeof(wifi_cfg.sta.ssid), "%s", CONFIG_WIFI_SSID);
+    snprintf((char *)wifi_cfg.sta.password, sizeof(wifi_cfg.sta.password), "%s", CONFIG_WIFI_PASS);
+    wifi_cfg.sta.threshold.authmode = WIFI_AUTH_WPA2_PSK;
+    wifi_cfg.sta.pmf_cfg.capable = true;
+    wifi_cfg.sta.pmf_cfg.required = false;
+
+    esp_err_t ret = esp_wifi_set_mode(WIFI_MODE_STA);
+    if (ret != ESP_OK) {
+        return ret;
+    }
+    ret = esp_wifi_set_config(WIFI_IF_STA, &wifi_cfg);
+    if (ret != ESP_OK) {
+        return ret;
+    }
+    esp_wifi_disconnect();
+    return esp_wifi_connect();
+}
+
+static bool terminal_ssh_host_key_accept(const uint8_t *key, size_t len, void *ctx)
+{
+    (void)key;
+    (void)len;
+    (void)ctx;
+    return true;
+}
+
+static void terminal_ssh_on_data(const uint8_t *data, size_t len, void *ctx)
+{
+    (void)ctx;
+    if (!data || len == 0 || !s_vt || !s_vterm_lock) {
+        return;
+    }
+    if (xSemaphoreTake(s_vterm_lock, pdMS_TO_TICKS(100)) == pdTRUE) {
+        vterm_input_write(s_vt, (const char *)data, (int)len);
+        xSemaphoreGive(s_vterm_lock);
+    }
+}
+
+static void terminal_ssh_on_connected(void *ctx)
+{
+    (void)ctx;
+    s_ssh_connected = true;
+    s_ssh_connecting = false;
+    terminal_vterm_write_line("[SSH] connected");
+    terminal_post_ssh_status(TERM_SSH_CONNECTED, 0);
+}
+
+static void terminal_ssh_on_disconnected(int reason, void *ctx)
+{
+    (void)ctx;
+    s_ssh_connected = false;
+    s_ssh_connecting = false;
+    if (reason == 0) {
+        terminal_vterm_write_line("[SSH] disconnected");
+    } else {
+        terminal_vterm_writef("[SSH] failed/disconnected: reason %d", reason);
+    }
+    terminal_vterm_write_line("Press Enter to reconnect.");
+    terminal_post_ssh_status(reason == 0 ? TERM_SSH_IDLE : TERM_SSH_FAILED, reason);
+}
+
+static void terminal_connect_task(void *arg)
+{
+    (void)arg;
+
+    terminal_post_ssh_status(TERM_SSH_WIFI, 0);
+    terminal_vterm_writef("[WiFi] connecting to %s ...", CONFIG_WIFI_SSID);
+    esp_err_t ret = terminal_wifi_start();
+    if (ret != ESP_OK) {
+        terminal_vterm_writef("[WiFi] start failed: %s", esp_err_to_name(ret));
+        s_ssh_connecting = false;
+        s_connect_task = NULL;
+        terminal_post_ssh_status(TERM_SSH_FAILED, (int)ret);
+        vTaskDelete(NULL);
+        return;
+    }
+
+    EventBits_t bits = xEventGroupWaitBits(s_wifi_events, TERM_WIFI_CONNECTED_BIT,
+                                           pdFALSE, pdFALSE,
+                                           pdMS_TO_TICKS(TERM_WIFI_TIMEOUT_MS));
+    if (!(bits & TERM_WIFI_CONNECTED_BIT)) {
+        terminal_vterm_write_line("[WiFi] timeout waiting for IP");
+        s_ssh_connecting = false;
+        s_connect_task = NULL;
+        terminal_post_ssh_status(TERM_SSH_FAILED, -1);
+        vTaskDelete(NULL);
+        return;
+    }
+
+    terminal_post_ssh_status(TERM_SSH_CONNECTING, 0);
+    terminal_vterm_writef("[SSH] connecting %s@%s:%d ...", CONFIG_DEFAULT_SSH_USER,
+                          CONFIG_DEFAULT_SSH_HOST, CONFIG_DEFAULT_SSH_PORT);
+
+    if (!s_wolfssh_initialized) {
+        wolfSSH_Init();
+        s_wolfssh_initialized = true;
+    }
+
+    ssh_client_config_t cfg = {
+        .host = CONFIG_DEFAULT_SSH_HOST,
+        .port = CONFIG_DEFAULT_SSH_PORT,
+        .user = CONFIG_DEFAULT_SSH_USER,
+        .privkey_pem = ssh_key_start,
+        .privkey_pem_len = (size_t)(ssh_key_end - ssh_key_start),
+        .pubkey_pem = ssh_pubkey_start,
+        .pubkey_pem_len = (size_t)(ssh_pubkey_end - ssh_pubkey_start),
+        .password = NULL,
+        .term_cols = TERM_VT_COLS,
+        .term_rows = TERM_VT_ROWS,
+        .connect_timeout_ms = 10000,
+        .callbacks = {
+            .on_data = terminal_ssh_on_data,
+            .on_connected = terminal_ssh_on_connected,
+            .on_disconnected = terminal_ssh_on_disconnected,
+            .on_host_key = terminal_ssh_host_key_accept,
+            .ctx = NULL,
+        },
+    };
+
+    ret = ssh_client_connect(&cfg);
+    if (ret != ESP_OK) {
+        terminal_vterm_writef("[SSH] start failed: %s", esp_err_to_name(ret));
+        s_ssh_connecting = false;
+        terminal_post_ssh_status(TERM_SSH_FAILED, (int)ret);
+    }
+
+    s_connect_task = NULL;
+    vTaskDelete(NULL);
+}
+
+static void terminal_start_ssh(void)
+{
+    if (s_connect_task || s_ssh_connecting || s_ssh_connected) {
+        return;
+    }
+
+    s_ssh_connecting = true;
+    BaseType_t ok = xTaskCreate(terminal_connect_task, "term_ssh_connect",
+                                TERM_CONNECT_STACK, NULL, 5, &s_connect_task);
+    if (ok != pdPASS) {
+        s_connect_task = NULL;
+        s_ssh_connecting = false;
+        terminal_vterm_write_line("[SSH] connect task create failed");
+        terminal_post_ssh_status(TERM_SSH_FAILED, ESP_ERR_NO_MEM);
+    }
+}
+
+static void terminal_send_to_ssh(const uint8_t *data, size_t len)
+{
+    if (!data || len == 0) {
+        return;
+    }
+
+    uint8_t out[32];
+    size_t out_len = 0;
+    for (size_t i = 0; i < len; i++) {
+        uint8_t ch = data[i];
+        if (ch == '\n') {
+            ch = '\r';
+        } else if (ch == '\b') {
+            ch = 0x7F;
+        }
+        out[out_len++] = ch;
+        if (out_len == sizeof(out)) {
+            esp_err_t ret = ssh_client_send(out, out_len);
+            if (ret != ESP_OK) {
+                terminal_vterm_writef("[SSH] send failed: %s", esp_err_to_name(ret));
+            }
+            out_len = 0;
+        }
+    }
+    if (out_len > 0) {
+        esp_err_t ret = ssh_client_send(out, out_len);
+        if (ret != ESP_OK) {
+            terminal_vterm_writef("[SSH] send failed: %s", esp_err_to_name(ret));
+        }
+    }
+}
+
+static void terminal_handle_offline_char(uint8_t ch)
+{
+    if (ch == '\r' || ch == '\n') {
+        terminal_start_ssh();
+    } else if (ch == 0x0C) {
+        if (s_vt_screen && xSemaphoreTake(s_vterm_lock, pdMS_TO_TICKS(100)) == pdTRUE) {
+            vterm_screen_reset(s_vt_screen, 1);
+            s_vt_dirty_rows = (TERM_VT_ROWS >= 64) ? UINT64_MAX : ((1ULL << TERM_VT_ROWS) - 1ULL);
+            xSemaphoreGive(s_vterm_lock);
+        }
+        terminal_vterm_banner();
+    } else if (ch == 0x03) {
+        if (s_ssh_connecting || s_ssh_connected) {
+            ssh_client_disconnect();
+            terminal_vterm_write_line("[SSH] disconnect requested");
+        }
     }
 }
 
@@ -503,8 +1115,7 @@ static void term_output_neofetch(void)
     term_append_line(T_HIGHLIGHT, "     ##    ##       ##       Host    ESP32-P4 + C6");
     term_append_line(T_HIGHLIGHT, "     ##    ##       ##       Kernel  5.15.0-esp32p4");
     term_append_line(T_HIGHLIGHT, "     ##    ##       ##       Shell   bash 5.1.16");
-    term_append_line(T_DEFAULT,   "                              BLE     CardKB2-A1B2 [CONNECTED]");
-    term_append_line(T_DEFAULT,   "                              ESPNOW  [ACTIVE] ch.6");
+    term_append_line(T_DEFAULT,   "                              KEYBOARD M5Unit-KEYBOARD [I2C]");
     term_append_line(T_DEFAULT,   "                              RAM     288M / 512M");
     term_append_line(T_DEFAULT,   "                              Display 1280x720 IPS");
     term_append_line(T_DIM,       "");
@@ -518,7 +1129,7 @@ static void term_output_help(void)
     term_append_line(T_INFO, "File:");
     term_append_line(T_DEFAULT, "  ls ls -la cat /etc/motd");
     term_append_line(T_INFO, "Network:");
-    term_append_line(T_DEFAULT, "  ifconfig ping ble status espnow scan");
+    term_append_line(T_DEFAULT, "  ifconfig ping keyboard status gamepage");
     term_append_line(T_INFO, "Process:");
     term_append_line(T_DEFAULT, "  top ps");
     term_append_line(T_INFO, "Fun:");
@@ -634,7 +1245,7 @@ static void term_process_command(const char *raw_cmd)
         const char *path = start + 4;
         if (strcmp(path, "/etc/motd") == 0) {
             term_append_line(T_DEFAULT, "Welcome to Tab5 Terminal UI.");
-            term_append_line(T_SUCCESS, "BLE keyboard ready. Have fun.");
+            term_append_line(T_SUCCESS, "M5Unit keyboard ready. Have fun.");
         } else {
             term_append_line(T_ERROR, "cat: %s: No such file or directory", path);
         }
@@ -655,14 +1266,11 @@ static void term_process_command(const char *raw_cmd)
         } else {
             term_append_line(T_WARN, "ping already running");
         }
-    } else if (strcmp(start, "ble status") == 0) {
-        term_append_line(T_DEFAULT, "BLE: %s", s_is_bt ? "connected" : "inactive");
-        term_append_line(T_INFO, "Paired device: CardKB2-A1B2");
-    } else if (strcmp(start, "espnow scan") == 0) {
-        term_append_line(T_INFO, "Scanning nearby ESP-NOW nodes...");
-        term_append_line(T_DEFAULT, "1) node-kb2  ch.6  -56 dBm");
-        term_append_line(T_DEFAULT, "2) sensor-c6 ch.6  -63 dBm");
-        term_append_line(T_SUCCESS, "scan complete");
+    } else if (strcmp(start, "keyboard status") == 0) {
+        term_append_line(T_DEFAULT, "M5Unit-KEYBOARD: %s",
+                         s_keyboard_connected ? "connected" : "not detected");
+    } else if (strcmp(start, "gamepage") == 0) {
+        build_gamepage();
     } else if (strcmp(start, "top") == 0) {
         term_output_top_realtime();
     } else if (strcmp(start, "ps") == 0) {
@@ -762,21 +1370,6 @@ static void term_handle_char(uint8_t ch)
     }
 
     
-    static bool fn_held = false;
-    if (ch == 0x10) { 
-        fn_held = true;
-        return;
-    }
-    if (ch == 0x11) { 
-        fn_held = false;
-        return;
-    }
-    if ((ch == 'q' || ch == 'Q') && fn_held) {
-        
-        lv_obj_t *scr = lv_disp_get_scr_act(NULL);
-        example_lvgl_demo_ui(scr);
-        return;
-    }
     if (ch >= 0x20 && ch <= 0x7E) {
         if (s_input_len < TERM_MAX_INPUT) {
             s_input_buf[s_input_len++] = (char)ch;
@@ -795,26 +1388,21 @@ static void key_async_cb(void *arg)
     }
     uint8_t ch = a->ch;
     free(a);
-    term_handle_char(ch);
+    if (s_remote_mode) {
+        terminal_handle_offline_char(ch);
+    } else {
+        term_handle_char(ch);
+    }
 }
 
-static void p5_recv_cb(bool is_bt, const uint8_t mac[6], const uint8_t *data, size_t len)
+static void keyboard_recv_cb(const uint8_t *data, size_t len)
 {
-    (void)mac;
-
     if (!data || len == 0) {
         return;
     }
 
-    if (!is_bt && len == 5 && data[0] == 0xAA && data[1] == 0x03) {
-        uint8_t ch = 0;
-        if (espnow_key_to_ascii(data[2], data[3], &ch)) {
-            key_async_arg_t *a = malloc(sizeof(key_async_arg_t));
-            if (a) {
-                a->ch = ch;
-                lv_async_call(key_async_cb, a);
-            }
-        }
+    if (s_remote_mode && s_ssh_connected) {
+        terminal_send_to_ssh(data, len);
         return;
     }
 
@@ -828,71 +1416,38 @@ static void p5_recv_cb(bool is_bt, const uint8_t mac[6], const uint8_t *data, si
     }
 }
 
-static void uart_recv_cb(const uint8_t *data, size_t len)
-{
-    if (!data || len == 0) {
-        return;
-    }
-
-    bool parsed_frame = false;
-    size_t i = 0;
-    while (i + 5 <= len) {
-        if (data[i] == 0xAA && data[i + 1] == 0x03) {
-            parsed_frame = true;
-            uint8_t ch = 0;
-            if (espnow_key_to_ascii(data[i + 2], data[i + 3], &ch)) {
-                key_async_arg_t *a = malloc(sizeof(key_async_arg_t));
-                if (a) {
-                    a->ch = ch;
-                    lv_async_call(key_async_cb, a);
-                }
-            }
-            i += 5;
-        } else {
-            i++;
-        }
-    }
-
-    if (!parsed_frame) {
-        for (size_t j = 0; j < len; j++) {
-            if (data[j] >= 0x03 && data[j] <= 0x7F) {
-                key_async_arg_t *a = malloc(sizeof(key_async_arg_t));
-                if (!a) {
-                    return;
-                }
-                a->ch = data[j];
-                lv_async_call(key_async_cb, a);
-            }
-        }
-    }
-}
-
-static void p5_status_async_cb(void *arg)
+static void keyboard_status_async_cb(void *arg)
 {
     status_async_arg_t *a = (status_async_arg_t *)arg;
     if (!a) {
         return;
     }
-    term_set_ble_status(!a->is_disconnected);
-    if (!a->is_disconnected) {
-        term_append_line(T_SUCCESS, "[BLE] CardKB2 connected");
+
+    s_keyboard_connected = !a->is_disconnected;
+    term_set_keyboard_status(s_keyboard_connected);
+    if (s_remote_mode) {
+        terminal_vterm_write_line(s_keyboard_connected ?
+                                  "[KEYBOARD] M5Unit-KEYBOARD connected" :
+                                  "[KEYBOARD] disconnected");
+    } else if (s_keyboard_connected) {
+        term_append_line(T_SUCCESS, "[KEYBOARD] M5Unit-KEYBOARD connected");
     } else {
-        term_append_line(T_ERROR, "[BLE] disconnected");
+        term_append_line(T_ERROR, "[KEYBOARD] disconnected");
     }
     free(a);
 }
 
-static void p5_status_cb(bool is_disconnected)
+static void keyboard_status_cb(bool connected)
 {
     status_async_arg_t *a = malloc(sizeof(status_async_arg_t));
     if (!a) {
         return;
     }
-    a->is_disconnected = is_disconnected;
-    lv_async_call(p5_status_async_cb, a);
+    a->is_disconnected = !connected;
+    lv_async_call(keyboard_status_async_cb, a);
 }
 
-static void build_topbar(lv_obj_t *root, bool is_bt)
+static void build_topbar(lv_obj_t *root)
 {
     lv_obj_t *bar = lv_obj_create(root);
     s_term.topbar = bar;
@@ -946,19 +1501,34 @@ static void build_topbar(lv_obj_t *root, bool is_bt)
     lv_obj_set_flex_flow(status, LV_FLEX_FLOW_ROW);
     lv_obj_set_style_pad_column(status, 10, 0);
 
+    lv_obj_t *ssh_dot = lv_obj_create(status);
+    s_term.ssh_dot = ssh_dot;
+    lv_obj_set_size(ssh_dot, 10, 10);
+    lv_obj_set_style_radius(ssh_dot, LV_RADIUS_CIRCLE, 0);
+    lv_obj_set_style_bg_color(ssh_dot, T_DIM, 0);
+    lv_obj_set_style_bg_opa(ssh_dot, LV_OPA_COVER, 0);
+    lv_obj_set_style_border_width(ssh_dot, 0, 0);
+    lv_obj_set_style_pad_all(ssh_dot, 0, 0);
+
+    lv_obj_t *ssh_lbl = lv_label_create(status);
+    s_term.ssh_label = ssh_lbl;
+    lv_label_set_text(ssh_lbl, "SSH IDLE");
+    lv_obj_set_style_text_color(ssh_lbl, T_DIM, 0);
+    lv_obj_set_style_text_font(ssh_lbl, &lv_font_inter_bold_24, 0);
+
     lv_obj_t *sdot = lv_obj_create(status);
-    s_term.ble_dot = sdot;
+    s_term.kb_dot = sdot;
     lv_obj_set_size(sdot, 10, 10);
     lv_obj_set_style_radius(sdot, LV_RADIUS_CIRCLE, 0);
-    lv_obj_set_style_bg_color(sdot, is_bt ? T_SUCCESS : T_INFO, 0);
+    lv_obj_set_style_bg_color(sdot, s_keyboard_connected ? T_SUCCESS : T_ERROR, 0);
     lv_obj_set_style_bg_opa(sdot, LV_OPA_COVER, 0);
     lv_obj_set_style_border_width(sdot, 0, 0);
     lv_obj_set_style_pad_all(sdot, 0, 0);
 
     lv_obj_t *slbl = lv_label_create(status);
-    s_term.ble_label = slbl;
-    lv_label_set_text(slbl, is_bt ? "CONNECTED" : "UART ACTIVE");
-    lv_obj_set_style_text_color(slbl, is_bt ? T_SUCCESS : T_INFO, 0);
+    s_term.kb_label = slbl;
+    lv_label_set_text(slbl, s_keyboard_connected ? "UNIT KB READY" : "NO KEYBOARD");
+    lv_obj_set_style_text_color(slbl, s_keyboard_connected ? T_SUCCESS : T_ERROR, 0);
     lv_obj_set_style_text_font(slbl, &lv_font_inter_bold_24, 0);
 }
 
@@ -1007,7 +1577,7 @@ static void build_input_row(lv_obj_t *root)
 
     lv_obj_t *prompt = lv_label_create(row);
     s_term.input_prompt = prompt;
-    lv_label_set_text(prompt, "Tab5@terminal : ~ $");
+    lv_label_set_text(prompt, "SSH");
     lv_obj_set_style_text_color(prompt, T_PROMPT, 0);
     lv_obj_set_style_text_font(prompt, &lv_font_inter_regular_20, 0);
 
@@ -1041,30 +1611,36 @@ static void build_input_row(lv_obj_t *root)
 
 void build_page5(bool is_bt)
 {
+    (void)is_bt;
+    lv_display_set_rotation(lv_display_get_default(), LV_DISPLAY_ROTATION_90);
+
+    if (s_ssh_connected || s_ssh_connecting) {
+        ssh_client_disconnect();
+    }
+    terminal_vterm_destroy();
+
     memset(&s_term, 0, sizeof(s_term));
     memset(s_input_buf, 0, sizeof(s_input_buf));
     s_input_len = 0;
     s_cmd_hist_count = 0;
     s_cmd_hist_index = -1;
-    s_is_bt = is_bt;
+    s_keyboard_connected = false;
+    s_ssh_connected = false;
+    s_ssh_connecting = false;
+    s_remote_mode = true;
 
     if (s_ping_timer) {
         lv_timer_del(s_ping_timer);
         s_ping_timer = NULL;
     }
 
-    if (is_bt) {
-        wireless_register_recv_cb(p5_recv_cb);
-        wireless_register_status_cb(p5_status_cb);
+    keyboard_mgr_register_recv_cb(keyboard_recv_cb);
+    keyboard_mgr_register_status_cb(keyboard_status_cb);
+    esp_err_t ret = keyboard_mgr_init();
+    if (ret == ESP_OK) {
+        s_keyboard_connected = keyboard_mgr_is_active();
     } else {
-        esp_err_t ret = uart_mgr_init();
-        if (ret == ESP_OK) {
-            uart_mgr_register_recv_cb(uart_recv_cb);
-            const char *test_msg = "TAB5 terminal ready\r\n";
-            uart_mgr_send((const uint8_t *)test_msg, strlen(test_msg));
-        } else {
-            ESP_LOGE("ui/page5", "UART init failed: %s", esp_err_to_name(ret));
-        }
+        ESP_LOGE(TAG, "M5Unit-KEYBOARD init failed: %s", esp_err_to_name(ret));
     }
 
     lv_obj_t *scr = lv_obj_create(NULL);
@@ -1076,13 +1652,28 @@ void build_page5(bool is_bt)
     lv_obj_set_style_border_width(scr, 0, 0);
     lv_obj_set_style_pad_all(scr, 0, 0);
 
-    build_topbar(scr, is_bt);
+    build_topbar(scr);
     build_output_area(scr);
     build_input_row(scr);
 
     term_reset_lines();
-    term_output_neofetch();
-    term_output_motd();
+    ret = terminal_vterm_init();
+    if (ret == ESP_OK) {
+        terminal_vterm_create_rows();
+        s_vterm_timer = lv_timer_create(terminal_vterm_render_timer, 33, NULL);
+        terminal_vterm_banner();
+        terminal_vterm_render_timer(NULL);
+        term_set_ssh_status(TERM_SSH_IDLE);
+        term_set_input_hint("SSH", "starting...", T_WARN);
+    } else {
+        s_remote_mode = false;
+        term_output_neofetch();
+        term_append_line(T_ERROR, "terminal parser init failed: %s", esp_err_to_name(ret));
+    }
 
     lv_screen_load_anim(scr, LV_SCREEN_LOAD_ANIM_MOVE_LEFT, 500, 0, true);
+
+    if (s_remote_mode) {
+        terminal_start_ssh();
+    }
 }
